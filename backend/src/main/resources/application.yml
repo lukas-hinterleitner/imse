@@ -1,0 +1,21 @@
+spring:
+  jpa:
+    generate-ddl: true
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        jdbc:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    open-in-view: false
+
+  security:
+    user:
+      name: imse
+      password: imseimse
+
+  data:
+    jdbc:
+      repositories:
+        enabled: false

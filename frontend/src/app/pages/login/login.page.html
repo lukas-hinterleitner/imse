@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Login</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-align-items-center ion-justify-content-center">
+  <ion-grid style="top: 30%; position: relative">
+    <ion-row>
+      <ion-col></ion-col>
+      <ion-col size="6">
+        <ion-item fill="outline">
+          <ion-label position="floating">Email</ion-label>
+          <ion-input [(ngModel)]="email" email required="true" type="email"></ion-input>
+          <ion-note slot="helper">Enter a valid email</ion-note>
+          <ion-note slot="error">Invalid email</ion-note>
+        </ion-item>
+        <br>
+        <ion-button (click)="login()" expand="block" size="large">Login</ion-button>
+      </ion-col>
+      <ion-col></ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
