@@ -5,6 +5,11 @@ import {LibraryService} from "../../services/library.service";
 import {Library} from "../../objects/library";
 import {User} from "../../objects/user";
 import {Router} from "@angular/router";
+import {HttpClient} from "@angular/common/http";
+import {environment} from "../../../environments/environment";
+import {firstValueFrom} from "rxjs";
+import {RoomBook} from "../../objects/roomBook";
+import {ToastController} from "@ionic/angular";
 
 @Component({
   selector: 'app-borrow',
@@ -13,32 +18,21 @@ import {Router} from "@angular/router";
 })
 export class BorrowPage implements OnInit {
 
-  public books : Book[] = Array();
+  public books : RoomBook[] = Array();
 
   library: Library | undefined = undefined;
   user: User | undefined = undefined;
 
-  constructor(private userService: UserService, private libraryService: LibraryService, private router: Router) { }
+  constructor(private userService: UserService, private libraryService: LibraryService, private router: Router, private http: HttpClient,
+              private toastController: ToastController) { }
 
   async ngOnInit() {
-    console.log("borrow init");
-    if (!(await this.userService.loggedIn() || await this.libraryService.available())) {
-      //await this.router.navigate(["/login"]);
-    }
-
     this.user = await this.userService.get();
+    this.library = await this.libraryService.get();
 
-    console.log(this.user);
+    this.books = await firstValueFrom(this.http.get<RoomBook[]>(environment.apiUrl + "/library/" + this.library?.id + "/books"));
 
-    for (let i = 0; i < 100; i++) {
-      const newBook = new Book();
-      newBook.id = 1;
-      newBook.name = "Harry Potter";
-      newBook.amountOfPages = 420;
-      newBook.quantity = 20;
-
-      this.books.push(newBook);
-    }
+    console.log(this.books)
   }
 
   async logout() {
@@ -46,5 +40,28 @@ export class BorrowPage implements OnInit {
     await this.libraryService.delete();
 
     await this.router.navigate(["/login"])
+  }
+
+  async borrow(roomBook: RoomBook) {
+    await firstValueFrom(this.http.post<RoomBook[]>(environment.apiUrl + "/borrow", {
+      bookId: roomBook.book.id,
+      libraryId: this.library?.id,
+      userId: this.user?.id
+    })).then(async value => {
+      this.books = value;
+      const toast = await this.toastController.create({
+        message: `"${roomBook.book.name}" was borrowed successfully`,
+        duration: 2500,
+        color: "success"
+      });
+      await toast.present();
+    }).catch(async reason => {
+      const toast = await this.toastController.create({
+        message: reason.toString(),
+        duration: 2500,
+        color: "danger"
+      });
+      await toast.present();
+    });
   }
 }

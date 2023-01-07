@@ -11,7 +11,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
     @Bean
     public SecurityFilterChain rootFilterChain(HttpSecurity http) throws Exception {
-        http.httpBasic().disable(); // disable spring default security for project (in production the default security would even be extended)
+        http.httpBasic().disable().cors().and().csrf().disable(); // disable spring default security for project (in production the default security would even be extended)
 
         return http.build();
     }

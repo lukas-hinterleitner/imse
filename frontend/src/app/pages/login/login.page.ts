@@ -19,10 +19,8 @@ export class LoginPage implements OnInit {
 
   constructor(private http: HttpClient, private userService: UserService, private libraryService: LibraryService, private router: Router) { }
 
-  async ngOnInit() {
-    if (await this.userService.loggedIn()) {
-      await this.router.navigate(["/borrow"])
-    }
+  ngOnInit() {
+
   }
 
   async login() {

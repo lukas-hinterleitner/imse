@@ -11,19 +11,19 @@
 </ion-header>
 
 <ion-content>
-    <ion-card *ngFor="let book of books;">
+    <ion-card *ngFor="let roomBook of books;">
       <ion-row>
         <ion-col>
           <ion-card-header>
-            <ion-card-title>{{book.name}}</ion-card-title>
-            <ion-card-subtitle>Pages: {{book.amountOfPages}}</ion-card-subtitle>
+            <ion-card-title>{{roomBook.book.name}}</ion-card-title>
+            <ion-card-subtitle>Pages: {{roomBook.book.amountPages}}</ion-card-subtitle>
           </ion-card-header>
           <ion-card-content>
-            Quantity: {{book.quantity}}
+            Quantity: {{roomBook.quantity}}
           </ion-card-content>
         </ion-col>
         <ion-col style="display: flex" class="ion-justify-content-center ion-align-items-center ion-float-end">
-          <ion-button>borrow</ion-button>
+          <ion-button [disabled]="roomBook.quantity === 0" (click)="borrow(roomBook)">borrow</ion-button>
         </ion-col>
       </ion-row>
     </ion-card>

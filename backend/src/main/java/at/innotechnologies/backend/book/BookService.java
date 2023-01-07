@@ -11,6 +11,4 @@ import org.springframework.transaction.annotation.Transactional;
 public class BookService {
     @NonNull
     private BookRepository bookRepository;
-
-
 }

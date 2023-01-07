@@ -29,4 +29,8 @@ export class UserService {
   async loggedIn() {
     return (await this.storage.keys()).includes(this.userKey);
   }
+
+  async loggedOut() {
+    return !(await this.storage.keys()).includes(this.userKey);
+  }
 }

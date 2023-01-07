@@ -17,7 +17,7 @@ export class LibraryService {
   }
 
   async get() {
-    await this.storage.get(this.libraryKey);
+    return await this.storage.get(this.libraryKey);
   }
 
   async available() {

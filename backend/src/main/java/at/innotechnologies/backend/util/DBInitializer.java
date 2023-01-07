@@ -1,5 +1,6 @@
 package at.innotechnologies.backend.util;
 
+import at.innotechnologies.backend.book.Book;
 import at.innotechnologies.backend.book.BookRepository;
 import at.innotechnologies.backend.library.*;
 import at.innotechnologies.backend.user.Customer;
@@ -24,6 +25,7 @@ public class DBInitializer {
     @NonNull private BookRepository bookRepository;
     @NonNull private RoomRepository roomRepository;
     @NonNull private LibraryRepository libraryRepository;
+    @NonNull private LibraryHelper libraryHelper;
 
     private boolean alreadyInitialized;
 
@@ -31,7 +33,7 @@ public class DBInitializer {
         Room technology = new Room();
         technology.setName("Technology");
         technology.setCapacity(10000);
-        technology.setLibrary(library);
+        library.addRoom(technology);
         technology.setRoomPrimaryKey(new RoomPrimaryKey(library.getId(), 1));
 
         technology = roomRepository.save(technology);
@@ -39,7 +41,7 @@ public class DBInitializer {
         Room medicine = new Room();
         medicine.setName("Medicine");
         medicine.setCapacity(10000);
-        medicine.setLibrary(library);
+        library.addRoom(medicine);
         medicine.setRoomPrimaryKey(new RoomPrimaryKey(library.getId(), 2));
 
         medicine = roomRepository.save(medicine);
@@ -47,11 +49,10 @@ public class DBInitializer {
         Room nature = new Room();
         nature.setName("Nature");
         nature.setCapacity(10000);
-        nature.setLibrary(library);
+        library.addRoom(nature);
         nature.setRoomPrimaryKey(new RoomPrimaryKey(library.getId(), 3));
 
         nature = roomRepository.save(nature);
-
     }
 
     @EventListener(ApplicationReadyEvent.class) // gets executed when application starts the first time
@@ -99,6 +100,19 @@ public class DBInitializer {
                 employee1.setLibrary(libraries.get(0));
 
                 employee1 = userRepository.save(employee1);
+            }
+
+            List<Book> books = bookRepository.findAll();
+            if (books.isEmpty()) {
+                Book harryPotter1 = new Book();
+                harryPotter1.setName("Data Science - The easy way");
+                harryPotter1.setAmountPages(350);
+
+                harryPotter1 = bookRepository.save(harryPotter1);
+                books.add(harryPotter1);
+
+                libraryHelper.addBookToRoom(libraries.get(0).getRooms().get(0), harryPotter1, 20);
+
             }
 
             alreadyInitialized = true;

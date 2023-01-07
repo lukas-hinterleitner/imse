@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -30,9 +31,14 @@ public class Library {
 
     @JsonIgnore
     @OneToMany(targetEntity = Room.class, mappedBy = "library")
-    private List<Room> rooms;
+    private List<Room> rooms = new ArrayList<>();
 
     @JsonIgnore
     @OneToMany(targetEntity = Employee.class, mappedBy = "library")
-    private List<Employee> employees;
+    private List<Employee> employees = new ArrayList<>();
+
+    public void addRoom(Room room) {
+        this.rooms.add(room);
+        room.setLibrary(this);
+    }
 }

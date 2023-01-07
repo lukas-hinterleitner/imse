@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import {AuthGuard} from "./guards/auth.guard";
+import {LoggedInGuard} from "./guards/logged-in.guard";
+import {LoggedOutGuard} from "./guards/logged-out.guard";
 
 const routes: Routes = [
   {
@@ -14,15 +15,20 @@ const routes: Routes = [
   },
   {
     path: 'register',
+    canLoad: [LoggedOutGuard],
+    canActivate: [LoggedOutGuard],
     loadChildren: () => import('./pages/register/register.module').then(m => m.RegisterPageModule)
   },
   {
     path: 'login',
+    canLoad: [LoggedOutGuard],
+    canActivate: [LoggedOutGuard],
     loadChildren: () => import('./pages/login/login.module').then(m => m.LoginPageModule)
   },
   {
     path: 'borrow',
-    canActivate: [AuthGuard],
+    canActivate: [LoggedInGuard],
+    canLoad: [LoggedInGuard],
     loadChildren: () => import('./pages/borrow/borrow.module').then(m => m.BorrowPageModule)
   }
 ];
