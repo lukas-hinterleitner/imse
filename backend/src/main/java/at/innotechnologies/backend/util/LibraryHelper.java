@@ -2,6 +2,7 @@ package at.innotechnologies.backend.util;
 
 import at.innotechnologies.backend.book.Book;
 import at.innotechnologies.backend.contains.Contains;
+import at.innotechnologies.backend.contains.ContainsMySql;
 import at.innotechnologies.backend.contains.ContainsRepository;
 import at.innotechnologies.backend.library.Library;
 import at.innotechnologies.backend.library.LibraryRepository;
@@ -27,7 +28,7 @@ public class LibraryHelper {
     private LibraryRepository libraryRepository;
 
     public void addBookToRoom(Room room, Book book, int quantity) {
-        Contains contains = new Contains();
+        Contains contains = new ContainsMySql();
 
         contains.setBook(book);
         contains.setRoom(room);

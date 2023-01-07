@@ -14,7 +14,8 @@ export class AppComponent {
     { title: 'Borrow', url: "/borrow", icon: 'book'},
   ];
 
-  constructor(private storage: Storage) {}
+  constructor(private storage: Storage) {
+  }
 
   async ngOnInit() {
     await this.storage.create();

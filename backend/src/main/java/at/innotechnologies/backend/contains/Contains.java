@@ -2,41 +2,23 @@ package at.innotechnologies.backend.contains;
 
 import at.innotechnologies.backend.book.Book;
 import at.innotechnologies.backend.library.Room;
-import lombok.*;
+import at.innotechnologies.backend.library.RoomMySql;
 
-import javax.persistence.*;
 import java.time.LocalDate;
 
-@Entity
-@AllArgsConstructor
-@NoArgsConstructor
-@Table(name = "contains")
-@Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString
-public class Contains {
+public interface Contains {
+    Integer id = null;
+    Book book = null;
+    RoomMySql room = null;
+    LocalDate deliveryDate = LocalDate.now();
+    Integer quantity = 0;
 
-    @EqualsAndHashCode.Include
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    void setBook(Book book);
+    void setRoom(Room room);
+    void setId(Integer id);
+    void setQuantity(Integer quantity);
+    void setDeliveryDate(LocalDate deliveryDate);
 
-    @EqualsAndHashCode.Exclude
-    @ManyToOne(targetEntity = Book.class)
-    @JoinColumn(name = "bookId", nullable = false, updatable = false)
-    private Book book;
-
-    @EqualsAndHashCode.Exclude
-    @ManyToOne(targetEntity = Room.class)
-    @JoinColumns({
-            @JoinColumn(name = "roomId", nullable = false, updatable = false),
-            @JoinColumn(name = "libraryId", nullable = false, updatable = false)
-    })
-    private Room room;
-
-    @Column
-    private LocalDate deliveryDate;
-
-    @Column
-    private Integer quantity;
+    Book getBook();
+    Integer getQuantity();
 }

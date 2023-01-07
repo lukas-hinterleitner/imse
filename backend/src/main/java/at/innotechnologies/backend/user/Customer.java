@@ -1,23 +1,16 @@
 package at.innotechnologies.backend.user;
 
-import lombok.*;
-
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.time.LocalDate;
 
-@Entity
-@AllArgsConstructor
-@NoArgsConstructor
-@Table(name = "customer")
-@Data
-@EqualsAndHashCode
-@ToString
-public class Customer extends User {
-    @Column(nullable = false)
-    private LocalDate registrationDate;
+public interface Customer extends User {
 
-    @Column(nullable = false)
-    private String phoneNumber;
+    LocalDate registrationDate = null;
+    String phoneNumber = null;
+
+    void setRegistrationDate(LocalDate registrationDate);
+    void setPhoneNumber(String phoneNumber);
+
+    LocalDate getRegistrationDate();
+    String getPhoneNumber();
 }

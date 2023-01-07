@@ -8,8 +8,8 @@ import at.innotechnologies.backend.library.Library;
 import at.innotechnologies.backend.library.LibraryRepository;
 import at.innotechnologies.backend.library.Room;
 import at.innotechnologies.backend.response.BookResponse;
-import at.innotechnologies.backend.user.User;
-import at.innotechnologies.backend.user.UserRepository;
+import at.innotechnologies.backend.user.UserMySql;
+import at.innotechnologies.backend.user.UserRepositoryMySql;
 import at.innotechnologies.backend.util.LibraryHelper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +32,7 @@ public class BorrowService {
     private BookRepository bookRepository;
 
     @NonNull
-    private UserRepository userRepository;
+    private UserRepositoryMySql userRepository;
 
     @NonNull
     private ContainsRepository containsRepository;
@@ -47,9 +47,9 @@ public class BorrowService {
 
         // find room where the book is located
         final Room room = library.getRooms().stream().filter(r -> r.getContains().stream().anyMatch(contains -> contains.getBook().equals(book))).findFirst().orElseThrow();
-        final User user = userRepository.findById(borrowBookPayload.getUserId()).orElseThrow();
+        final UserMySql user = userRepository.findById(borrowBookPayload.getUserId()).orElseThrow();
 
-        final Borrows borrows = new Borrows();
+        final Borrows borrows = new BorrowsMySql();
 
         borrows.setBook(book);
         borrows.setUser(user);

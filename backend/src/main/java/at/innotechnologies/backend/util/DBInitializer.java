@@ -1,12 +1,10 @@
 package at.innotechnologies.backend.util;
 
 import at.innotechnologies.backend.book.Book;
+import at.innotechnologies.backend.book.BookMySql;
 import at.innotechnologies.backend.book.BookRepository;
 import at.innotechnologies.backend.library.*;
-import at.innotechnologies.backend.user.Customer;
-import at.innotechnologies.backend.user.Employee;
-import at.innotechnologies.backend.user.User;
-import at.innotechnologies.backend.user.UserRepository;
+import at.innotechnologies.backend.user.*;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -30,27 +28,27 @@ public class DBInitializer {
     private boolean alreadyInitialized;
 
     private void addRoomsToLibrary(Library library) {
-        Room technology = new Room();
+        Room technology = new RoomMySql();
         technology.setName("Technology");
         technology.setCapacity(10000);
         library.addRoom(technology);
-        technology.setRoomPrimaryKey(new RoomPrimaryKey(library.getId(), 1));
+        ((RoomMySql)technology).setRoomPrimaryKey(new RoomPrimaryKey(library.getId(), 1));
 
         technology = roomRepository.save(technology);
 
-        Room medicine = new Room();
+        Room medicine = new RoomMySql();
         medicine.setName("Medicine");
         medicine.setCapacity(10000);
         library.addRoom(medicine);
-        medicine.setRoomPrimaryKey(new RoomPrimaryKey(library.getId(), 2));
+        ((RoomMySql)medicine).setRoomPrimaryKey(new RoomPrimaryKey(library.getId(), 2));
 
         medicine = roomRepository.save(medicine);
 
-        Room nature = new Room();
+        Room nature = new RoomMySql();
         nature.setName("Nature");
         nature.setCapacity(10000);
         library.addRoom(nature);
-        nature.setRoomPrimaryKey(new RoomPrimaryKey(library.getId(), 3));
+        ((RoomMySql)nature).setRoomPrimaryKey(new RoomPrimaryKey(library.getId(), 3));
 
         nature = roomRepository.save(nature);
     }
@@ -61,7 +59,7 @@ public class DBInitializer {
             List<Library> libraries = libraryRepository.findAll();
 
             if (libraries.isEmpty()) {
-                Library library1 = new Library();
+                Library library1 = new LibraryMySql();
                 library1.setName("Austrian National Library");
                 library1.setAddressCity("1010 Vienna");
                 library1.setAddressStreet("Herrengasse 9");
@@ -70,7 +68,7 @@ public class DBInitializer {
                 addRoomsToLibrary(library1);
                 libraries.add(library1);
 
-                Library library2 = new Library();
+                Library library2 = new LibraryMySql();
                 library2.setName("Vienna City Library");
                 library2.setAddressCity("1010 Vienna");
                 library2.setAddressStreet("Felderstraße 1");
@@ -84,27 +82,27 @@ public class DBInitializer {
 
             List<User> users = userRepository.findAll();
             if (users.isEmpty()) {
-                Customer customer1 = new Customer();
+                Customer customer1 = new CustomerMySql();
                 customer1.setName("Lukas Hinterleitner");
                 customer1.setEmail("lukas.hinterleitner98@gmail.com");
                 customer1.setPhoneNumber("+43981723462349");
                 customer1.setRegistrationDate(LocalDate.now());
 
-                customer1 = userRepository.save(customer1);
+                customer1 = (Customer) userRepository.save(customer1);
 
-                Employee employee1 = new Employee();
+                Employee employee1 = new EmployeeMySql();
                 employee1.setName("Mitarbeiter 1");
                 employee1.setEmail("mitarbeiter1@library.com");
                 employee1.setSalary(5000.0);
                 employee1.setHiringDate(LocalDate.now());
                 employee1.setLibrary(libraries.get(0));
 
-                employee1 = userRepository.save(employee1);
+                employee1 = (Employee) userRepository.save(employee1);
             }
 
             List<Book> books = bookRepository.findAll();
             if (books.isEmpty()) {
-                Book harryPotter1 = new Book();
+                Book harryPotter1 = new BookMySql();
                 harryPotter1.setName("Data Science - The easy way");
                 harryPotter1.setAmountPages(350);
 
@@ -112,7 +110,6 @@ public class DBInitializer {
                 books.add(harryPotter1);
 
                 libraryHelper.addBookToRoom(libraries.get(0).getRooms().get(0), harryPotter1, 20);
-
             }
 
             alreadyInitialized = true;

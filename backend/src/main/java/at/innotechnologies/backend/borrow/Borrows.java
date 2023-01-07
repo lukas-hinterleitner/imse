@@ -2,42 +2,27 @@ package at.innotechnologies.backend.borrow;
 
 import at.innotechnologies.backend.book.Book;
 import at.innotechnologies.backend.library.Room;
-import at.innotechnologies.backend.user.User;
-import lombok.*;
+import at.innotechnologies.backend.library.RoomMySql;
+import at.innotechnologies.backend.user.UserMySql;
 
-import javax.persistence.*;
 import java.time.LocalDate;
 
-@Entity
-@AllArgsConstructor
-@NoArgsConstructor
-@Table(name = "borrows")
-@Data
-@EqualsAndHashCode
-@ToString
-public class Borrows {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+public interface Borrows {
+    Book book = null;
+    UserMySql user = null;
+    RoomMySql room = null;
+    LocalDate startDate = LocalDate.now();
+    LocalDate endDate = LocalDate.now().plusMonths(2);
 
-    @ManyToOne(targetEntity = User.class)
-    @JoinColumn(name = "userId", nullable = false, updatable = false)
-    private User user;
+    Book getBook();
+    UserMySql getUser();
+    RoomMySql getRoom();
+    LocalDate getStartDate();
+    LocalDate getEndDate();
 
-    @ManyToOne(targetEntity = Book.class)
-    @JoinColumn(name = "bookId", nullable = false, updatable = false)
-    private Book book;
-
-    @ManyToOne(targetEntity = Room.class)
-    @JoinColumns({
-            @JoinColumn(name = "roomId", nullable = false, updatable = false),
-            @JoinColumn(name = "libraryId", nullable = false, updatable = false)
-    })
-    private Room room;
-
-    @Column(nullable = false, updatable = false)
-    private LocalDate startDate;
-
-    @Column(nullable = false)
-    private LocalDate endDate;
+    void setBook(Book book);
+    void setUser(UserMySql user);
+    void setRoom(Room room);
+    void setStartDate(LocalDate startDate);
+    void setEndDate(LocalDate endDate);
 }

@@ -1,28 +1,20 @@
 package at.innotechnologies.backend.user;
 
 import at.innotechnologies.backend.library.Library;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.Column;
 import java.time.LocalDate;
 
-@Entity
-@AllArgsConstructor
-@NoArgsConstructor
-@Table(name = "employee")
-@Data
-@EqualsAndHashCode
-@ToString
-public class Employee extends User {
-    @Column(nullable = false)
-    private LocalDate hiringDate;
+public interface Employee extends User {
+    LocalDate hiringDate = null;
+    Double salary = null;
+    Library library = null;
 
-    @Column(nullable = false)
-    private Double salary;
+    LocalDate getHiringDate();
+    Double getSalary();
+    Library getLibrary();
 
-    @JsonIgnore
-    @ManyToOne(targetEntity = Library.class, optional = false)
-    @JoinColumn(name = "libraryId", referencedColumnName = "id")
-    private Library library;
+    void setHiringDate(LocalDate hiringDate);
+    void setSalary(Double salary);
+    void setLibrary(Library library);
 }

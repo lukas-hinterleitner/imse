@@ -15,16 +15,16 @@ import java.util.Random;
 @Transactional
 public class LibraryService {
     @NonNull
-    private LibraryRepository libraryRepository;
+    private LibraryRepositoryMySql libraryRepository;
 
     @NonNull
-    private RoomRepository roomRepository;
+    private RoomRepositoryMySql roomRepository;
 
     @NonNull
     private LibraryHelper libraryHelper;
 
-    public Library getRandomLibrary() {
-        final List<Library> libraries = libraryRepository.findAll();
+    public LibraryMySql getRandomLibrary() {
+        final List<LibraryMySql> libraries = libraryRepository.findAll();
 
         return libraries.get(new Random().nextInt(libraries.size()));
     }

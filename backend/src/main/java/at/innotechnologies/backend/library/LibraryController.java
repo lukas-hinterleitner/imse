@@ -1,6 +1,5 @@
 package at.innotechnologies.backend.library;
 
-import at.innotechnologies.backend.book.Book;
 import at.innotechnologies.backend.response.BookResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,7 @@ public class LibraryController {
     private LibraryService libraryService;
 
     @GetMapping("/random")
-    public Library getRandomLibrary() {
+    public LibraryMySql getRandomLibrary() {
         return libraryService.getRandomLibrary();
     }
 

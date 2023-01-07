@@ -10,5 +10,5 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class BookService {
     @NonNull
-    private BookRepository bookRepository;
+    private BookRepositoryMySql bookRepository;
 }

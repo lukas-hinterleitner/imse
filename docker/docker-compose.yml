@@ -1,4 +1,23 @@
 services:
+    mongo:
+        image: mongo
+        restart: always
+        environment:
+            - MONGO_INITDB_ROOT_USERNAME=root
+            - MONGO_INITDB_ROOT_PASSWORD=example
+        ports:
+            - "27017:27017"
+
+    mongo-express:
+        image: mongo-express
+        restart: always
+        ports:
+            - 8081:8081
+        environment:
+            - ME_CONFIG_MONGODB_ADMINUSERNAME=root
+            - ME_CONFIG_MONGODB_ADMINPASSWORD=example
+            - ME_CONFIG_MONGODB_URL=mongodb://root:example@mongo:27017/
+
     database:
         container_name: database
         image: mysql/mysql-server:8.0.31
@@ -23,6 +42,7 @@ services:
 
         depends_on:
             - database
+            - mongo
 
         ports: 
             - "5000:8080"
@@ -31,6 +51,7 @@ services:
             - SPRING_DATASOURCE_URL=jdbc:mysql://database:3306/imse
             - SPRING_DATASOURCE_USERNAME=root
             - SPRING_DATASOURCE_PASSWORD=information
+            - SPRING_DATA_MONGODB_URI=mongodb://root:example@mongo:27017/imse
             
     frontend:
         container_name: frontend

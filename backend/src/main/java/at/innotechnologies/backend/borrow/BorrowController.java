@@ -1,6 +1,5 @@
 package at.innotechnologies.backend.borrow;
 
-import at.innotechnologies.backend.book.Book;
 import at.innotechnologies.backend.response.BookResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

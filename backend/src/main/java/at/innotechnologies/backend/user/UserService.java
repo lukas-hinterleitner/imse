@@ -14,19 +14,19 @@ import java.time.LocalDate;
 @Transactional
 public class UserService {
     @NonNull
-    private UserRepository userRepository;
+    private UserRepositoryMySql userRepository;
 
-    public User login(String email) {
+    public UserMySql login(String email) {
         return userRepository.findByEmail(email.toLowerCase())
                 .orElseThrow(() -> new ResourceNotFoundException("user not found"));
     }
 
-    public User register(UserCreationPayload payload) {
+    public UserMySql register(UserCreationPayload payload) {
         userRepository.findByEmail(payload.getEmail().toLowerCase()).ifPresent(user -> {
             throw new AlreadyExistsException("user already exists");
         });
 
-        final Customer customer = new Customer();
+        final CustomerMySql customer = new CustomerMySql();
         customer.setEmail(payload.getEmail());
         customer.setName(payload.getName());
         customer.setPhoneNumber(payload.getPhoneNumber());

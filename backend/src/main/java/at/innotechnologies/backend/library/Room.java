@@ -1,50 +1,28 @@
 package at.innotechnologies.backend.library;
 
-import at.innotechnologies.backend.book.Book;
 import at.innotechnologies.backend.borrow.Borrows;
+import at.innotechnologies.backend.borrow.BorrowsMySql;
 import at.innotechnologies.backend.contains.Contains;
+import at.innotechnologies.backend.contains.ContainsMySql;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-@Entity
-@AllArgsConstructor
-@NoArgsConstructor
-@Table(name = "room")
-@Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString
-public class Room {
+public interface Room {
 
-    @EqualsAndHashCode.Include
-    @EmbeddedId
-    private RoomPrimaryKey roomPrimaryKey = new RoomPrimaryKey();
+    RoomPrimaryKey roomPrimaryKey = new RoomPrimaryKey();
+    String name = null;
+    Integer capacity = null;
+    Library library = null;
+    Set<Contains> contains = new HashSet<>();
+    Set<Borrows> borrowed = new HashSet<>();
 
-    @EqualsAndHashCode.Include
-    @Column(nullable = false)
-    private String name;
+    void setName(String name);
+    void setLibrary(Library library);
+    void setCapacity(Integer capacity);
 
-    @EqualsAndHashCode.Include
-    @Column(nullable = false)
-    private Integer capacity;
-
-    @ManyToOne
-    @MapsId("libraryId")
-    @JoinColumn(name = "libraryId", referencedColumnName = "id")
-    private Library library;
-
-    @EqualsAndHashCode.Exclude
-    @JsonIgnore
-    @OneToMany(targetEntity = Contains.class, mappedBy = "room")
-    private Set<Contains> contains = new HashSet<>();
-
-    @EqualsAndHashCode.Exclude
-    @JsonIgnore
-    @OneToMany(targetEntity = Borrows.class, mappedBy = "room")
-    private Set<Borrows> borrowed = new HashSet<>();
+    Set<Contains> getContains();
 }

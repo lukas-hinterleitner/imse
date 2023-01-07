@@ -1,44 +1,25 @@
 package at.innotechnologies.backend.library;
 
-import at.innotechnologies.backend.user.Employee;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import at.innotechnologies.backend.user.EmployeeMySql;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@AllArgsConstructor
-@NoArgsConstructor
-@Table(name = "library")
-@Data
-@EqualsAndHashCode
-@ToString
-public class Library {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+public interface Library {
+    Integer id = null;
+    String name = null;
+    String addressStreet = null;
+    String addressCity = null;
+    List<Room> rooms = new ArrayList<>();
+    List<EmployeeMySql> employees = new ArrayList<>();
 
-    @Column(nullable = false)
-    private String name;
+    Integer getId();
 
-    @Column(nullable = false)
-    private String addressStreet;
+    List<Room> getRooms();
 
-    @Column(nullable = false)
-    private String addressCity;
+    void setName(String name);
+    void setAddressStreet(String addressStreet);
+    void setAddressCity(String addressStreet);
 
-    @JsonIgnore
-    @OneToMany(targetEntity = Room.class, mappedBy = "library")
-    private List<Room> rooms = new ArrayList<>();
-
-    @JsonIgnore
-    @OneToMany(targetEntity = Employee.class, mappedBy = "library")
-    private List<Employee> employees = new ArrayList<>();
-
-    public void addRoom(Room room) {
-        this.rooms.add(room);
-        room.setLibrary(this);
-    }
+    void addRoom(Room room);
 }
