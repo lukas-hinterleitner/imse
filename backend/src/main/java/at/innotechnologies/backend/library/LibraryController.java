@@ -20,12 +20,12 @@ public class LibraryController {
     private LibraryService libraryService;
 
     @GetMapping("/random")
-    public LibraryMySql getRandomLibrary() {
+    public Library getRandomLibrary() {
         return libraryService.getRandomLibrary();
     }
 
     @GetMapping("{id}/books")
-    public List<BookResponse> getBookForLibrary(@PathVariable Integer id) {
+    public List<BookResponse> getBookForLibrary(@PathVariable String id) {
         return libraryService.getBooksForLibrary(id);
     }
 }

@@ -14,8 +14,8 @@ public class BorrowsRepository {
     @NonNull
     private BorrowsRepositoryMongo borrowsRepositoryMongo;
 
-    Borrows save(Borrows borrows) {
-        if (Migration.migrationFinished) {
+    public Borrows save(Borrows borrows) {
+        if (Migration.migrationInitialized) {
             return borrowsRepositoryMongo.save((BorrowsMongo) borrows);
         } else {
             return borrowsRepositoryMySql.save((BorrowsMySql) borrows);

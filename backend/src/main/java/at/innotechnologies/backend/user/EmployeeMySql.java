@@ -1,6 +1,5 @@
 package at.innotechnologies.backend.user;
 
-import at.innotechnologies.backend.library.Library;
 import at.innotechnologies.backend.library.LibraryMySql;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
@@ -26,9 +25,4 @@ public class EmployeeMySql extends UserMySql implements Employee {
     @ManyToOne(targetEntity = LibraryMySql.class, optional = false)
     @JoinColumn(name = "libraryId", referencedColumnName = "id")
     private LibraryMySql library;
-
-    @Override
-    public void setLibrary(Library library) {
-        this.library = (LibraryMySql) library;
-    }
 }

@@ -2,12 +2,12 @@ package at.innotechnologies.backend.contains;
 
 import at.innotechnologies.backend.book.Book;
 import at.innotechnologies.backend.book.BookMySql;
-import at.innotechnologies.backend.library.Room;
 import at.innotechnologies.backend.library.RoomMySql;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Entity
 @AllArgsConstructor
@@ -20,8 +20,7 @@ public class ContainsMySql implements Contains {
 
     @EqualsAndHashCode.Include
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private String id = UUID.randomUUID().toString();
 
     @EqualsAndHashCode.Exclude
     @ManyToOne(targetEntity = BookMySql.class)
@@ -45,10 +44,5 @@ public class ContainsMySql implements Contains {
     @Override
     public void setBook(Book book) {
         this.book = (BookMySql) book;
-    }
-
-    @Override
-    public void setRoom(Room room) {
-        this.room = (RoomMySql) room;
     }
 }

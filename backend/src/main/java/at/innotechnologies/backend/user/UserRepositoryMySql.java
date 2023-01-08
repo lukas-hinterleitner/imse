@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface UserRepositoryMySql extends JpaRepository<UserMySql, Integer> {
+public interface UserRepositoryMySql extends JpaRepository<UserMySql, String> {
     Optional<UserMySql> findByEmail(String email);
 }

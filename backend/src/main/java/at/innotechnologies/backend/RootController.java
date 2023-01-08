@@ -1,12 +1,17 @@
 package at.innotechnologies.backend;
 
-import at.innotechnologies.backend.util.Migration;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
 public class RootController {
+    @NonNull
+    private MigrationService migrationService;
+
     @GetMapping
     public ResponseEntity<String> applicationRoot() {
         return ResponseEntity.ok("Backend up");
@@ -14,11 +19,7 @@ public class RootController {
 
     @GetMapping("/migrate")
     public ResponseEntity<Boolean> migrate() {
-        System.out.println(Migration.migrationFinished);
-
-        // todo: migration from mySql to mongodb
-
-        Migration.migrationFinished = true;
+        migrationService.migrate();
         return ResponseEntity.ok(true);
     }
 }

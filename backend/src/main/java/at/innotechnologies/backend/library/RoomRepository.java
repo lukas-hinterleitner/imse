@@ -16,7 +16,7 @@ public class RoomRepository {
 
 
     public Room save(Room room) {
-        if (Migration.migrationFinished) {
+        if (Migration.migrationInitialized) {
             return roomRepositoryMongo.save((RoomMongo) room);
         } else {
             return roomRepositoryMySql.save((RoomMySql) room);

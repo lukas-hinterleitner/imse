@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -22,9 +23,28 @@ public class UserRepository {
     @NonNull
     private EmployeeRepository employeeRepository;
 
+    public Optional<User> findById(String id) {
+        if (Migration.migrationInitialized) {
+            Optional<CustomerMongo> customerMongo = customerRepository.findById(id);
+            Optional<EmployeeMongo> employeeMongo = employeeRepository.findById(id);
+
+            if (customerMongo.isPresent())
+                return customerMongo.map(customerMongo1 -> customerMongo1);
+            else if (employeeMongo.isPresent())
+                return employeeMongo.map(employeeMongo1 -> employeeMongo1);
+            else return Optional.empty();
+        } else {
+            return userRepositoryMySql.findById(id).map(userMySql -> userMySql);
+        }
+    }
+
     public User save(User user) {
-        if (Migration.migrationFinished) {
-            if (user instanceof CustomerMongo customerMongo) {
+        if (Migration.migrationInitialized) {
+            if (user instanceof CustomerMySql customerMySql) {
+                return customerRepository.save(Migration.customerToMongo(customerMySql));
+            } else if (user instanceof EmployeeMySql employeeMySql) {
+                return employeeRepository.save(Migration.employeeToMongo(employeeMySql));
+            } else if (user instanceof CustomerMongo customerMongo) {
                 return customerRepository.save(customerMongo);
             } else if (user instanceof EmployeeMongo employeeMongo) {
                 return employeeRepository.save(employeeMongo);
@@ -37,7 +57,7 @@ public class UserRepository {
     }
 
     public List<User> findAll() {
-        if (Migration.migrationFinished) {
+        if (Migration.migrationInitialized) {
             return Stream.concat(
                     customerRepository.findAll().stream().map(customerMongo -> (User) customerMongo),
                     employeeRepository.findAll().stream().map(employeeMongo -> (User) employeeMongo)
@@ -45,5 +65,9 @@ public class UserRepository {
         } else {
             return userRepositoryMySql.findAll().stream().map(userMySql -> (User) userMySql).collect(Collectors.toList());
         }
+    }
+
+    public List<User> saveAll(List<User> users) {
+        return users.stream().map(this::save).collect(Collectors.toList());
     }
 }

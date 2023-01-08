@@ -1,6 +1,10 @@
 package at.innotechnologies.backend.user;
 
 import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Field;
+
+import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -8,7 +12,13 @@ import lombok.*;
 @EqualsAndHashCode
 @ToString
 public class UserMongo implements User {
-    private Integer id;
+
+    @Id
+    private String id = UUID.randomUUID().toString();
+
+    @Field
     private String name;
+
+    @Field
     private String email;
 }

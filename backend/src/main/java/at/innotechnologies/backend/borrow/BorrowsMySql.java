@@ -4,11 +4,13 @@ import at.innotechnologies.backend.book.Book;
 import at.innotechnologies.backend.book.BookMySql;
 import at.innotechnologies.backend.library.Room;
 import at.innotechnologies.backend.library.RoomMySql;
+import at.innotechnologies.backend.user.User;
 import at.innotechnologies.backend.user.UserMySql;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Entity
 @AllArgsConstructor
@@ -19,8 +21,7 @@ import java.time.LocalDate;
 @ToString
 public class BorrowsMySql implements Borrows {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private String id = UUID.randomUUID().toString();
 
     @ManyToOne(targetEntity = UserMySql.class)
     @JoinColumn(name = "userId", nullable = false, updatable = false)
@@ -28,7 +29,7 @@ public class BorrowsMySql implements Borrows {
 
     @ManyToOne(targetEntity = BookMySql.class)
     @JoinColumn(name = "bookId", nullable = false, updatable = false)
-    private Book book;
+    private BookMySql book;
 
     @ManyToOne(targetEntity = RoomMySql.class)
     @JoinColumns({
@@ -42,6 +43,16 @@ public class BorrowsMySql implements Borrows {
 
     @Column(nullable = false)
     private LocalDate endDate;
+
+    @Override
+    public void setBook(Book book) {
+        this.book = (BookMySql) book;
+    }
+
+    @Override
+    public void setUser(User user) {
+        this.user = (UserMySql) user;
+    }
 
     @Override
     public void setRoom(Room room) {

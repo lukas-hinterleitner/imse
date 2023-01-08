@@ -1,5 +1,6 @@
 package at.innotechnologies.backend.library;
 
+import at.innotechnologies.backend.user.Employee;
 import at.innotechnologies.backend.user.EmployeeMySql;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
@@ -7,6 +8,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Entity
@@ -18,8 +20,7 @@ import java.util.stream.Collectors;
 @ToString
 public class LibraryMySql implements Library {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private String id = UUID.randomUUID().toString();
 
     @Column(nullable = false)
     private String name;
@@ -40,11 +41,16 @@ public class LibraryMySql implements Library {
 
     public void addRoom(Room room) {
         this.rooms.add((RoomMySql) room);
-        room.setLibrary(this);
+        ((RoomMySql)room).setLibrary(this);
     }
 
     @Override
     public List<Room> getRooms() {
         return this.rooms.stream().map(roomMySql -> (Room) roomMySql).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Employee> getEmployees() {
+        return this.employees.stream().map(employeeMySql -> (Employee) employeeMySql).collect(Collectors.toList());
     }
 }

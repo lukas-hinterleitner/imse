@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Configuration
 @RequiredArgsConstructor
@@ -32,7 +33,7 @@ public class DBInitializer {
         technology.setName("Technology");
         technology.setCapacity(10000);
         library.addRoom(technology);
-        ((RoomMySql)technology).setRoomPrimaryKey(new RoomPrimaryKey(library.getId(), 1));
+        ((RoomMySql)technology).setRoomPrimaryKey(new RoomPrimaryKey(library.getId(), UUID.randomUUID().toString()));
 
         technology = roomRepository.save(technology);
 
@@ -40,7 +41,7 @@ public class DBInitializer {
         medicine.setName("Medicine");
         medicine.setCapacity(10000);
         library.addRoom(medicine);
-        ((RoomMySql)medicine).setRoomPrimaryKey(new RoomPrimaryKey(library.getId(), 2));
+        ((RoomMySql)medicine).setRoomPrimaryKey(new RoomPrimaryKey(library.getId(), UUID.randomUUID().toString()));
 
         medicine = roomRepository.save(medicine);
 
@@ -48,7 +49,7 @@ public class DBInitializer {
         nature.setName("Nature");
         nature.setCapacity(10000);
         library.addRoom(nature);
-        ((RoomMySql)nature).setRoomPrimaryKey(new RoomPrimaryKey(library.getId(), 3));
+        ((RoomMySql)nature).setRoomPrimaryKey(new RoomPrimaryKey(library.getId(), UUID.randomUUID().toString()));
 
         nature = roomRepository.save(nature);
     }
@@ -95,21 +96,22 @@ public class DBInitializer {
                 employee1.setEmail("mitarbeiter1@library.com");
                 employee1.setSalary(5000.0);
                 employee1.setHiringDate(LocalDate.now());
-                employee1.setLibrary(libraries.get(0));
+                ((EmployeeMySql)employee1).setLibrary((LibraryMySql) libraries.get(0));
 
                 employee1 = (Employee) userRepository.save(employee1);
             }
 
             List<Book> books = bookRepository.findAll();
             if (books.isEmpty()) {
-                Book harryPotter1 = new BookMySql();
-                harryPotter1.setName("Data Science - The easy way");
-                harryPotter1.setAmountPages(350);
+                Book dataScience = new BookMySql();
+                dataScience.setName("Data Science - The easy way");
+                dataScience.setAmountPages(350);
 
-                harryPotter1 = bookRepository.save(harryPotter1);
-                books.add(harryPotter1);
+                dataScience = bookRepository.save(dataScience);
+                books.add(dataScience);
 
-                libraryHelper.addBookToRoom(libraries.get(0).getRooms().get(0), harryPotter1, 20);
+                libraryHelper.addBookToRoom(libraries.get(0).getRooms().get(0), dataScience, 15);
+                libraryHelper.addBookToRoom(libraries.get(1).getRooms().get(0), dataScience, 20);
             }
 
             alreadyInitialized = true;

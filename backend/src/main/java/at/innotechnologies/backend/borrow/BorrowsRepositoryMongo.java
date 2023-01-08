@@ -4,5 +4,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface BorrowsRepositoryMongo extends MongoRepository<Borrows, Integer> {
+public interface BorrowsRepositoryMongo extends MongoRepository<Borrows, String> {
 }

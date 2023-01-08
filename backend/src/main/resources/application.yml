@@ -19,3 +19,15 @@ spring:
     jdbc:
       repositories:
         enabled: false
+    mongodb:
+      uri: ${SPRING_DATA_MONGODB_URI:mongodb://root:example@localhost:27017/imse?authSource=admin}
+      database: imse
+
+logging:
+  level:
+    org:
+      springframework:
+        data:
+          mongodb:
+            core:
+              MongoTemplate: DEBUG

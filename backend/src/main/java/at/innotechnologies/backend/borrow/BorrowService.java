@@ -8,9 +8,10 @@ import at.innotechnologies.backend.library.Library;
 import at.innotechnologies.backend.library.LibraryRepository;
 import at.innotechnologies.backend.library.Room;
 import at.innotechnologies.backend.response.BookResponse;
-import at.innotechnologies.backend.user.UserMySql;
-import at.innotechnologies.backend.user.UserRepositoryMySql;
+import at.innotechnologies.backend.user.User;
+import at.innotechnologies.backend.user.UserRepository;
 import at.innotechnologies.backend.util.LibraryHelper;
+import at.innotechnologies.backend.util.Migration;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,7 @@ public class BorrowService {
     private BookRepository bookRepository;
 
     @NonNull
-    private UserRepositoryMySql userRepository;
+    private UserRepository userRepository;
 
     @NonNull
     private ContainsRepository containsRepository;
@@ -47,9 +48,11 @@ public class BorrowService {
 
         // find room where the book is located
         final Room room = library.getRooms().stream().filter(r -> r.getContains().stream().anyMatch(contains -> contains.getBook().equals(book))).findFirst().orElseThrow();
-        final UserMySql user = userRepository.findById(borrowBookPayload.getUserId()).orElseThrow();
+        final User user = userRepository.findById(borrowBookPayload.getUserId()).orElseThrow();
 
-        final Borrows borrows = new BorrowsMySql();
+        final Borrows borrows = Migration.migrationInitialized
+            ? new BorrowsMongo()
+            : new BorrowsMySql();
 
         borrows.setBook(book);
         borrows.setUser(user);
@@ -57,16 +60,19 @@ public class BorrowService {
         borrows.setStartDate(LocalDate.now());
         borrows.setEndDate(LocalDate.now().plusMonths(2));
 
-        borrowsRepository.save(borrows);
-
         // update stock
         Contains contains = room.getContains().stream().filter(c -> c.getBook().equals(book)).findFirst().orElseThrow();
+
+        if (!Migration.migrationInitialized)
+            containsRepository.save(contains);
 
         if (contains.getQuantity() > 0) {
             contains.setQuantity(contains.getQuantity() - 1);
         }
 
-        containsRepository.save(contains);
+        borrowsRepository.save(borrows);
+
+
 
         return libraryHelper.getBooksForLibrary(library.getId());
     }

@@ -4,20 +4,16 @@ import lombok.Data;
 import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 
 @Data
 @ToString
 public class BorrowBookPayload {
     @NotNull
-    @Positive
-    private Integer libraryId;
+    private String libraryId;
 
     @NotNull
-    @Positive
-    private Integer userId;
+    private String userId;
 
     @NotNull
-    @Positive
-    private Integer bookId;
+    private String bookId;
 }

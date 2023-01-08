@@ -5,7 +5,6 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,7 +19,7 @@ public class LibraryRepository {
     private LibraryRepositoryMySql libraryRepositoryMySql;
 
     public List<Library> findAll() {
-        if (Migration.migrationFinished) {
+        if (Migration.migrationInitialized) {
             return libraryRepositoryMongo.findAll().stream().map(libraryMongo -> (Library) libraryMongo).collect(Collectors.toList());
         } else {
             return libraryRepositoryMySql.findAll().stream().map(libraryMongo -> (Library) libraryMongo).collect(Collectors.toList());
@@ -28,21 +27,23 @@ public class LibraryRepository {
     }
 
     public Library save(Library library) {
-        if (Migration.migrationFinished) {
-            return libraryRepositoryMongo.save((LibraryMongo) library);
+        if (Migration.migrationInitialized) {
+            if (library instanceof LibraryMongo libraryMongo) {
+                return libraryRepositoryMongo.save(libraryMongo);
+            } else {
+                return libraryRepositoryMongo.save(Migration.libraryToMongo(library));
+            }
         } else {
             return libraryRepositoryMySql.save((LibraryMySql) library);
         }
     }
 
     public List<Library> saveAll(List<Library> libraries) {
-        libraries.forEach(this::save);
-
-        return libraries;
+        return libraries.stream().map(this::save).collect(Collectors.toList());
     }
 
-    public Optional<Library> findById(Integer id) {
-        if (Migration.migrationFinished) {
+    public Optional<Library> findById(String id) {
+        if (Migration.migrationInitialized) {
             return libraryRepositoryMongo.findById(id).map(libraryMongo -> libraryMongo);
         } else {
             return libraryRepositoryMySql.findById(id).map(libraryMySql -> libraryMySql);

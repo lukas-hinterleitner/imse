@@ -15,21 +15,21 @@ import java.util.Random;
 @Transactional
 public class LibraryService {
     @NonNull
-    private LibraryRepositoryMySql libraryRepository;
+    private LibraryRepository libraryRepository;
 
     @NonNull
-    private RoomRepositoryMySql roomRepository;
+    private RoomRepository roomRepository;
 
     @NonNull
     private LibraryHelper libraryHelper;
 
-    public LibraryMySql getRandomLibrary() {
-        final List<LibraryMySql> libraries = libraryRepository.findAll();
+    public Library getRandomLibrary() {
+        final List<Library> libraries = libraryRepository.findAll();
 
         return libraries.get(new Random().nextInt(libraries.size()));
     }
 
-    public List<BookResponse> getBooksForLibrary(Integer libraryId) {
+    public List<BookResponse> getBooksForLibrary(String libraryId) {
         return libraryHelper.getBooksForLibrary(libraryId);
     }
 }

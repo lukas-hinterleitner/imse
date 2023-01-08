@@ -1,7 +1,7 @@
 package at.innotechnologies.backend.user;
 
 public interface User {
-    Integer id = null;
+    String id = null;
     String name = null;
     String email = null;
 
@@ -10,4 +10,5 @@ public interface User {
 
     String getName();
     String getEmail();
+    String getId();
 }

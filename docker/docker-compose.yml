@@ -1,5 +1,6 @@
 services:
     mongo:
+        container_name: mongodb
         image: mongo
         restart: always
         environment:
@@ -9,6 +10,7 @@ services:
             - "27017:27017"
 
     mongo-express:
+        container_name: mongo-express
         image: mongo-express
         restart: always
         ports:
@@ -51,7 +53,7 @@ services:
             - SPRING_DATASOURCE_URL=jdbc:mysql://database:3306/imse
             - SPRING_DATASOURCE_USERNAME=root
             - SPRING_DATASOURCE_PASSWORD=information
-            - SPRING_DATA_MONGODB_URI=mongodb://root:example@mongo:27017/imse
+            - SPRING_DATA_MONGODB_URI=mongodb://root:example@mongo:27017/imse?authSource=admin
             
     frontend:
         container_name: frontend

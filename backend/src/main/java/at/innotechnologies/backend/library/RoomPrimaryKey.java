@@ -12,6 +12,6 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RoomPrimaryKey implements Serializable {
-    private Integer libraryId;
-    private Integer roomId;
+    private String libraryId;
+    private String roomId;
 }

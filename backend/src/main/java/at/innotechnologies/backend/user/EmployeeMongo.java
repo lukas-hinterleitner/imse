@@ -1,10 +1,9 @@
 package at.innotechnologies.backend.user;
 
-import at.innotechnologies.backend.library.Library;
-import at.innotechnologies.backend.library.LibraryMongo;
 import lombok.*;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-import javax.persistence.Column;
 import java.time.LocalDate;
 
 @AllArgsConstructor
@@ -12,15 +11,12 @@ import java.time.LocalDate;
 @Data
 @EqualsAndHashCode
 @ToString
+@Document(collection = "employees")
 public class EmployeeMongo extends UserMongo implements Employee {
+
+    @Field
     private LocalDate hiringDate;
 
+    @Field
     private Double salary;
-
-    private LibraryMongo library;
-
-    @Override
-    public void setLibrary(Library library) {
-        this.library = (LibraryMongo) library;
-    }
 }

@@ -1,6 +1,7 @@
 package at.innotechnologies.backend.user;
 
 import lombok.*;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
 
@@ -9,6 +10,7 @@ import java.time.LocalDate;
 @Data
 @EqualsAndHashCode
 @ToString
+@Document(collection = "customers")
 public class CustomerMongo extends UserMongo implements Customer {
     private LocalDate registrationDate;
 

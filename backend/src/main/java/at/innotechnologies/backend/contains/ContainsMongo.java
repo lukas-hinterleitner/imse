@@ -2,35 +2,35 @@ package at.innotechnologies.backend.contains;
 
 import at.innotechnologies.backend.book.Book;
 import at.innotechnologies.backend.book.BookMongo;
-import at.innotechnologies.backend.library.Room;
-import at.innotechnologies.backend.library.RoomMySql;
 import lombok.*;
-import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode
 @ToString
-@Document(collection = "contains")
 public class ContainsMongo implements Contains {
-    private Integer id;
 
+    @Id
+    private String id = UUID.randomUUID().toString();
+
+    @DBRef
     private BookMongo book;
-    private RoomMySql room;
+
+    @Field
     private LocalDate deliveryDate;
 
+    @Field
     private Integer quantity;
 
     @Override
     public void setBook(Book book) {
         this.book = (BookMongo) book;
-    }
-
-    @Override
-    public void setRoom(Room room) {
-        this.room = (RoomMySql) room;
     }
 }

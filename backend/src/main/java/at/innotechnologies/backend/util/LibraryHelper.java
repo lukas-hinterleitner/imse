@@ -7,6 +7,7 @@ import at.innotechnologies.backend.contains.ContainsRepository;
 import at.innotechnologies.backend.library.Library;
 import at.innotechnologies.backend.library.LibraryRepository;
 import at.innotechnologies.backend.library.Room;
+import at.innotechnologies.backend.library.RoomMySql;
 import at.innotechnologies.backend.response.BookResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -31,17 +32,20 @@ public class LibraryHelper {
         Contains contains = new ContainsMySql();
 
         contains.setBook(book);
-        contains.setRoom(room);
+
+        if (!Migration.migrationInitialized) {
+            ((ContainsMySql)contains).setRoom((RoomMySql) room);
+        }
+
         contains.setQuantity(quantity);
         contains.setDeliveryDate(LocalDate.now());
 
         room.getContains().add(contains);
-        book.getContains().add(contains);
 
         containsRepository.save(contains);
     }
 
-    public List<BookResponse> getBooksForLibrary(Integer libraryId) {
+    public List<BookResponse> getBooksForLibrary(String libraryId) {
         Library library = libraryRepository.findById(libraryId).orElseThrow();
 
         final List<BookResponse> bookResponses = new ArrayList<>();

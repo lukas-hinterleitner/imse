@@ -3,7 +3,6 @@ package at.innotechnologies.backend.book;
 import at.innotechnologies.backend.util.Migration;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +20,7 @@ public class BookRepository {
 
 
     public List<Book> findAll() {
-        if (Migration.migrationFinished) {
+        if (Migration.migrationInitialized) {
             return bookRepositoryMongo.findAll().stream().map(bookMongo -> (Book)bookMongo).collect(Collectors.toList());
         } else {
             return bookRepositoryMySql.findAll().stream().map(bookMySql -> (Book)bookMySql).collect(Collectors.toList());
@@ -29,15 +28,23 @@ public class BookRepository {
     }
 
     public Book save(Book book) {
-        if (Migration.migrationFinished) {
-            return bookRepositoryMongo.save((BookMongo) book);
+        if (Migration.migrationInitialized) {
+            if (book instanceof BookMongo bookMongo) {
+                return bookRepositoryMongo.save(bookMongo);
+            } else {
+                return bookRepositoryMongo.save(Migration.bookToMongo(book));
+            }
         } else {
             return bookRepositoryMySql.save((BookMySql) book);
         }
     }
 
-    public Optional<Book> findById(Integer id) {
-        if (Migration.migrationFinished) {
+    public List<Book> saveAll(List<Book> books) {
+        return books.stream().map(this::save).collect(Collectors.toList());
+    }
+
+    public Optional<Book> findById(String id) {
+        if (Migration.migrationInitialized) {
             return bookRepositoryMongo.findById(id).map(bookMongo -> bookMongo);
         } else {
             return bookRepositoryMySql.findById(id).map(bookMySql -> bookMySql);

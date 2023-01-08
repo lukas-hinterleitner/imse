@@ -48,12 +48,12 @@ public class RoomMySql implements Room {
     private Set<BorrowsMySql> borrowed = new HashSet<>();
 
     @Override
-    public void setLibrary(Library library) {
-        this.library = (LibraryMySql) library;
+    public Set<Contains> getContains() {
+        return this.contains.stream().map(containsMySql -> (Contains) containsMySql).collect(Collectors.toSet());
     }
 
     @Override
-    public Set<Contains> getContains() {
-        return this.contains.stream().map(containsMySql -> (Contains) containsMySql).collect(Collectors.toSet());
+    public String getId() {
+        return this.roomPrimaryKey.getRoomId();
     }
 }

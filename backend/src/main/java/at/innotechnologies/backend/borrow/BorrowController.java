@@ -24,7 +24,6 @@ public class BorrowController {
 
     @PostMapping
     public ResponseEntity<List<BookResponse>> borrowBook(@Valid @RequestBody BorrowBookPayload borrowBookPayload) {
-        System.out.println(borrowBookPayload);
         return ResponseEntity.ok(borrowService.borrowBook(borrowBookPayload));
     }
 }

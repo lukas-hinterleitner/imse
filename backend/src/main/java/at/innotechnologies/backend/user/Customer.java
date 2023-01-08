@@ -1,6 +1,5 @@
 package at.innotechnologies.backend.user;
 
-import javax.persistence.Column;
 import java.time.LocalDate;
 
 public interface Customer extends User {
