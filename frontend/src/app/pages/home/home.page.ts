@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
 import {firstValueFrom} from "rxjs";
-import {logIn} from "ionicons/icons";
+import {ToastController} from "@ionic/angular";
 
 @Component({
   selector: 'app-home',
@@ -11,7 +11,7 @@ import {logIn} from "ionicons/icons";
 })
 export class HomePage implements OnInit {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private toastController: ToastController) { }
 
   ngOnInit() {
     console.log(environment.apiUrl);
@@ -19,8 +19,21 @@ export class HomePage implements OnInit {
 
   async migrate() {
     await firstValueFrom(this.http.get(environment.apiUrl + "/migrate"))
-      .then(value => console.log("migration success"))
-      .catch(reason => console.log("migration failed"));
-
+      .then(async value => {
+        const toast = await this.toastController.create({
+          message: `"migration to mongo db successful!`,
+          duration: 2500,
+          color: "success"
+        });
+        await toast.present();
+      })
+      .catch(async reason => {
+        const toast = await this.toastController.create({
+          message: "migration to mongo db failed!",
+          duration: 2500,
+          color: "danger"
+        });
+        await toast.present();
+      });
   }
 }

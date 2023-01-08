@@ -8,8 +8,8 @@ import at.innotechnologies.backend.user.User;
 import at.innotechnologies.backend.user.UserMongo;
 import lombok.*;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.LocalDate;
@@ -28,10 +28,10 @@ public class BorrowsMongo implements Borrows {
     @Field
     private UserMongo user;
 
-    @DBRef
+    @DocumentReference
     private BookMongo book;
 
-    @DBRef
+    @DocumentReference
     private RoomMongo room;
 
     @Field

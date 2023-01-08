@@ -63,16 +63,16 @@ public class BorrowService {
         // update stock
         Contains contains = room.getContains().stream().filter(c -> c.getBook().equals(book)).findFirst().orElseThrow();
 
-        if (!Migration.migrationInitialized)
-            containsRepository.save(contains);
-
         if (contains.getQuantity() > 0) {
             contains.setQuantity(contains.getQuantity() - 1);
         }
 
+        if (!Migration.migrationInitialized)
+            containsRepository.save(contains);
+        else
+            libraryRepository.save(library);
+
         borrowsRepository.save(borrows);
-
-
 
         return libraryHelper.getBooksForLibrary(library.getId());
     }

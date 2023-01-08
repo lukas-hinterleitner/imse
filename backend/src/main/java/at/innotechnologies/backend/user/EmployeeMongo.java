@@ -1,7 +1,6 @@
 package at.innotechnologies.backend.user;
 
 import lombok.*;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.LocalDate;
@@ -11,7 +10,6 @@ import java.time.LocalDate;
 @Data
 @EqualsAndHashCode
 @ToString
-@Document(collection = "employees")
 public class EmployeeMongo extends UserMongo implements Employee {
 
     @Field

@@ -18,12 +18,12 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/login")
-    public ResponseEntity<UserMySql> login(@NotEmpty @RequestParam("email") String email) {
+    public ResponseEntity<User> login(@NotEmpty @RequestParam("email") String email) {
         return ResponseEntity.ok(userService.login(email));
     }
 
     @PostMapping
-    public ResponseEntity<UserMySql> register(@Valid @RequestBody UserCreationPayload payload) {
+    public ResponseEntity<User> register(@Valid @RequestBody UserCreationPayload payload) {
         return ResponseEntity.ok(userService.register(payload));
     }
 }

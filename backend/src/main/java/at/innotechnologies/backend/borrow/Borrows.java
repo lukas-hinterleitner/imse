@@ -20,10 +20,12 @@ public interface Borrows {
     Room getRoom();
     LocalDate getStartDate();
     LocalDate getEndDate();
+    String getId();
 
     void setBook(Book book);
     void setUser(User user);
     void setRoom(Room room);
     void setStartDate(LocalDate startDate);
     void setEndDate(LocalDate endDate);
+    void setId(String id);
 }

@@ -2,6 +2,7 @@ package at.innotechnologies.backend.user;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.UUID;
@@ -20,5 +21,6 @@ public class UserMongo implements User {
     private String name;
 
     @Field
+    @Indexed
     private String email;
 }

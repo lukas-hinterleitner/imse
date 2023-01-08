@@ -23,6 +23,21 @@ public class UserRepository {
     @NonNull
     private EmployeeRepository employeeRepository;
 
+    public Optional<User> findByEmail(String email) {
+        if (Migration.migrationInitialized) {
+            Optional<CustomerMongo> customerMongo = customerRepository.findByEmail(email);
+            Optional<EmployeeMongo> employeeMongo = employeeRepository.findByEmail(email);
+
+            if (customerMongo.isPresent())
+                return customerMongo.map(customerMongo1 -> customerMongo1);
+            else if (employeeMongo.isPresent())
+                return employeeMongo.map(employeeMongo1 -> employeeMongo1);
+            else return Optional.empty();
+        } else {
+            return userRepositoryMySql.findByEmail(email).map(userMySql -> userMySql);
+        }
+    }
+
     public Optional<User> findById(String id) {
         if (Migration.migrationInitialized) {
             Optional<CustomerMongo> customerMongo = customerRepository.findById(id);
@@ -43,7 +58,7 @@ public class UserRepository {
             if (user instanceof CustomerMySql customerMySql) {
                 return customerRepository.save(Migration.customerToMongo(customerMySql));
             } else if (user instanceof EmployeeMySql employeeMySql) {
-                return employeeRepository.save(Migration.employeeToMongo(employeeMySql));
+                return Migration.employeeToMongo(employeeMySql);
             } else if (user instanceof CustomerMongo customerMongo) {
                 return customerRepository.save(customerMongo);
             } else if (user instanceof EmployeeMongo employeeMongo) {

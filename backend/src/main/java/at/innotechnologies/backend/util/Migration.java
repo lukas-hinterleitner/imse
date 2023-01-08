@@ -2,16 +2,16 @@ package at.innotechnologies.backend.util;
 
 import at.innotechnologies.backend.book.Book;
 import at.innotechnologies.backend.book.BookMongo;
+import at.innotechnologies.backend.borrow.Borrows;
+import at.innotechnologies.backend.borrow.BorrowsMongo;
 import at.innotechnologies.backend.contains.Contains;
 import at.innotechnologies.backend.contains.ContainsMongo;
 import at.innotechnologies.backend.library.Library;
 import at.innotechnologies.backend.library.LibraryMongo;
 import at.innotechnologies.backend.library.Room;
 import at.innotechnologies.backend.library.RoomMongo;
-import at.innotechnologies.backend.user.Customer;
-import at.innotechnologies.backend.user.CustomerMongo;
-import at.innotechnologies.backend.user.Employee;
-import at.innotechnologies.backend.user.EmployeeMongo;
+import at.innotechnologies.backend.user.*;
+import at.innotechnologies.backend.util.exception.InvalidDataException;
 
 import java.util.stream.Collectors;
 
@@ -79,6 +79,16 @@ public class Migration {
         }
     }
 
+    public static UserMongo userToMongo(User user) {
+        if (user instanceof Employee employee) {
+            return employeeToMongo(employee);
+        } else if (user instanceof Customer customer) {
+            return customerToMongo(customer);
+        } else {
+            throw new InvalidDataException("type not defined");
+        }
+    }
+
     public static EmployeeMongo employeeToMongo(Employee employee) {
         if (employee instanceof EmployeeMongo employeeMongo) {
             return employeeMongo;
@@ -107,6 +117,23 @@ public class Migration {
             customerMongo.setRegistrationDate(customer.getRegistrationDate());
 
             return customerMongo;
+        }
+    }
+
+    public static BorrowsMongo borrowsToMongo(Borrows borrows) {
+        if (borrows instanceof BorrowsMongo borrowsMongo) {
+            return borrowsMongo;
+        } else {
+            BorrowsMongo borrowsMongo = new BorrowsMongo();
+
+            borrowsMongo.setId(borrows.getId());
+            borrowsMongo.setBook(bookToMongo(borrows.getBook()));
+            borrowsMongo.setRoom(roomToMongo(borrows.getRoom()));
+            borrowsMongo.setUser(userToMongo(borrows.getUser()));
+            borrowsMongo.setStartDate(borrows.getStartDate());
+            borrowsMongo.setEndDate(borrows.getEndDate());
+
+            return borrowsMongo;
         }
     }
 }

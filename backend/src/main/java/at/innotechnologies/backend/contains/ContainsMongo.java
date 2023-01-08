@@ -4,7 +4,7 @@ import at.innotechnologies.backend.book.Book;
 import at.innotechnologies.backend.book.BookMongo;
 import lombok.*;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.LocalDate;
@@ -20,7 +20,7 @@ public class ContainsMongo implements Contains {
     @Id
     private String id = UUID.randomUUID().toString();
 
-    @DBRef
+    @DocumentReference
     private BookMongo book;
 
     @Field
