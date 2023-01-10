@@ -22,8 +22,18 @@ export class UserService {
     await this.router.navigate(["/login"])
   }
 
-  async get() {
+  async get(): Promise<User> {
     return await this.storage.get(this.userKey);
+  }
+
+  async isEmployee(): Promise<boolean> {
+    const user = await this.get();
+
+    if (user) {
+      return user.isEmployee;
+    } else {
+      return false;
+    }
   }
 
   async loggedIn() {

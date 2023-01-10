@@ -12,7 +12,13 @@ export class AppComponent {
     { title: 'Register', url: "/register", icon: 'person-add'},
     { title: 'Login', url: "/login", icon: 'log-in'},
     { title: 'Borrow', url: "/borrow", icon: 'book'},
+    { title: 'Add Book', url: "/add-book", icon: 'add'},
   ];
+
+  public reportPages = [
+    {title: 'Report Arostegui', url: "/report-arostegui", icon: "analytics"},
+    {title: 'Report Hinterleitner', url: "/report-hinterleitner", icon: "analytics"}
+  ]
 
   constructor(private storage: Storage) {
   }

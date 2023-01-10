@@ -5,18 +5,19 @@ import at.innotechnologies.backend.book.BookMySql;
 import at.innotechnologies.backend.book.BookRepository;
 import at.innotechnologies.backend.library.*;
 import at.innotechnologies.backend.user.*;
+import com.github.javafaker.Faker;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-@Configuration
+@Service
 @RequiredArgsConstructor
 @Transactional
 public class DBInitializer {
@@ -54,8 +55,9 @@ public class DBInitializer {
         nature = roomRepository.save(nature);
     }
 
-    @EventListener(ApplicationReadyEvent.class) // gets executed when application starts the first time
-    public void initializeDBOnApplicationReady() {
+    public void importData() {
+        final Faker faker = new Faker();
+
         if (!alreadyInitialized) {
             List<Library> libraries = libraryRepository.findAll();
 
@@ -81,11 +83,13 @@ public class DBInitializer {
                 libraries = libraryRepository.saveAll(libraries);
             }
 
+            final int numLibraries = libraries.size();
+
             List<User> users = userRepository.findAll();
             if (users.isEmpty()) {
                 Customer customer1 = new CustomerMySql();
                 customer1.setName("Lukas Hinterleitner");
-                customer1.setEmail("lukas.hinterleitner98@gmail.com");
+                customer1.setEmail("testmail@mail.com");
                 customer1.setPhoneNumber("+43981723462349");
                 customer1.setRegistrationDate(LocalDate.now());
 
@@ -99,19 +103,41 @@ public class DBInitializer {
                 ((EmployeeMySql)employee1).setLibrary((LibraryMySql) libraries.get(0));
 
                 employee1 = (Employee) userRepository.save(employee1);
+
+                for (int i = 0; i < 20; i++) {
+                    Employee employee = new EmployeeMySql();
+                    employee.setName(faker.name().fullName());
+                    employee.setEmail(faker.internet().safeEmailAddress());
+                    employee.setSalary((double) faker.number().numberBetween(2000, 5000));
+                    employee.setHiringDate(LocalDate.of(2022, faker.number().numberBetween(1, 12), faker.number().numberBetween(1, 28)));
+
+                    ((EmployeeMySql)employee).setLibrary((LibraryMySql) libraries.get(faker.number().numberBetween(0, numLibraries)));
+
+                    employee = (Employee) userRepository.save(employee);
+                }
             }
 
             List<Book> books = bookRepository.findAll();
             if (books.isEmpty()) {
-                Book dataScience = new BookMySql();
-                dataScience.setName("Data Science - The easy way");
-                dataScience.setAmountPages(350);
+                for (int i = 0; i < 60; i++) {
+                    final String bookName = faker.book().title();
 
-                dataScience = bookRepository.save(dataScience);
-                books.add(dataScience);
+                    if (books.stream().anyMatch(book -> book.getName().equals(bookName))) {
+                        continue;
+                    }
 
-                libraryHelper.addBookToRoom(libraries.get(0).getRooms().get(0), dataScience, 15);
-                libraryHelper.addBookToRoom(libraries.get(1).getRooms().get(0), dataScience, 20);
+                    Book book = new BookMySql();
+                    book.setName(bookName);
+                    book.setAmountPages(faker.number().numberBetween(150, 500));
+
+                    book = bookRepository.save(book);
+                    books.add(book);
+
+                    final Library randomLibrary = libraries.get(faker.number().numberBetween(0, numLibraries));
+                    final int numRooms = randomLibrary.getRooms().size();
+
+                    libraryHelper.addBookToRoom(randomLibrary.getRooms().get(faker.number().numberBetween(0, numRooms)), book, faker.number().numberBetween(5, 50));
+                }
             }
 
             alreadyInitialized = true;

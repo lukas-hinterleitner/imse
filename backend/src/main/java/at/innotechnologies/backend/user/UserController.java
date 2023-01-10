@@ -1,5 +1,6 @@
 package at.innotechnologies.backend.user;
 
+import at.innotechnologies.backend.response.UserResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,12 +19,12 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/login")
-    public ResponseEntity<User> login(@NotEmpty @RequestParam("email") String email) {
+    public ResponseEntity<UserResponse> login(@NotEmpty @RequestParam("email") String email) {
         return ResponseEntity.ok(userService.login(email));
     }
 
     @PostMapping
-    public ResponseEntity<User> register(@Valid @RequestBody UserCreationPayload payload) {
+    public ResponseEntity<UserResponse> register(@Valid @RequestBody UserCreationPayload payload) {
         return ResponseEntity.ok(userService.register(payload));
     }
 }

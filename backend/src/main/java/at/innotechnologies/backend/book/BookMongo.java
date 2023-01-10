@@ -16,6 +16,7 @@ import java.util.UUID;
 public class BookMongo implements Book {
 
     @Id
+    @EqualsAndHashCode.Include
     private String id = UUID.randomUUID().toString();
 
     @Field

@@ -26,10 +26,9 @@ export class RegisterPage implements OnInit {
 
   async registerUser() {
     const user = await firstValueFrom(this.http.post<User>(environment.apiUrl + "/users", {name: this.name, email: this.email, phoneNumber: this.phone}));
-    const library = await firstValueFrom(this.http.get<Library>(environment.apiUrl + "/library/random"));
+    const library = await firstValueFrom(this.http.get<Library>(environment.apiUrl + "/library/random?userId=" + user.id));
 
     await this.libraryService.set(library);
     await this.userService.login(user);
   }
-
 }

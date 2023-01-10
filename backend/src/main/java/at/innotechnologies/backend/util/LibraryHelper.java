@@ -9,15 +9,14 @@ import at.innotechnologies.backend.library.LibraryRepository;
 import at.innotechnologies.backend.library.Room;
 import at.innotechnologies.backend.library.RoomMySql;
 import at.innotechnologies.backend.response.BookResponse;
+import com.github.javafaker.Faker;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +26,11 @@ public class LibraryHelper {
 
     @NonNull
     private LibraryRepository libraryRepository;
+
+    private LocalDate getRandomLocalDateBetween(LocalDate first, LocalDate last) {
+        long randomDay = ThreadLocalRandom.current().nextLong(first.toEpochDay(), last.toEpochDay());
+        return LocalDate.ofEpochDay(randomDay);
+    }
 
     public void addBookToRoom(Room room, Book book, int quantity) {
         Contains contains = new ContainsMySql();
@@ -38,7 +42,7 @@ public class LibraryHelper {
         }
 
         contains.setQuantity(quantity);
-        contains.setDeliveryDate(LocalDate.now());
+        contains.setDeliveryDate(getRandomLocalDateBetween(LocalDate.of(2022, 12, 1), LocalDate.of(2023, 1, 30)));
 
         room.getContains().add(contains);
 
@@ -46,11 +50,10 @@ public class LibraryHelper {
     }
 
     public List<BookResponse> getBooksForLibrary(String libraryId) {
-        Library library = libraryRepository.findById(libraryId).orElseThrow();
-
+        final Library library = libraryRepository.findById(libraryId).orElseThrow();
         final List<BookResponse> bookResponses = new ArrayList<>();
 
-        Map<Book, Integer> books = new HashMap<>();
+        final Map<Book, Integer> books = new HashMap<>();
 
         for (Room room: library.getRooms()) {
             for (Contains contains: room.getContains()) {

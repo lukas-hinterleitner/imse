@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Report Hinterleitner</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <p>
+          For each library list the book with its corresponding quantity for each room filtered by delivery date December and sorted by name of the book.
+        </p>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngFor="let library of libraries">
+      <ion-col>
+        <h1>{{library.name}}</h1>
+        <h4>Rooms:</h4>
+        <ion-card *ngFor="let room of library.rooms">
+          <ion-card-header>
+            <ion-card-title>{{room.name}}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-item *ngFor="let book of room.books">
+              {{book.book.name}} - Quantity: {{book.quantity}}
+            </ion-item>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

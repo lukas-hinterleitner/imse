@@ -1,5 +1,7 @@
 package at.innotechnologies.backend.user;
 
+import at.innotechnologies.backend.library.Library;
+import at.innotechnologies.backend.library.LibraryRepository;
 import at.innotechnologies.backend.util.Migration;
 import at.innotechnologies.backend.util.exception.InvalidDataException;
 import lombok.NonNull;
@@ -23,16 +25,25 @@ public class UserRepository {
     @NonNull
     private EmployeeRepository employeeRepository;
 
+    @NonNull
+    private LibraryRepository libraryRepository;
+
     public Optional<User> findByEmail(String email) {
         if (Migration.migrationInitialized) {
             Optional<CustomerMongo> customerMongo = customerRepository.findByEmail(email);
-            Optional<EmployeeMongo> employeeMongo = employeeRepository.findByEmail(email);
 
             if (customerMongo.isPresent())
                 return customerMongo.map(customerMongo1 -> customerMongo1);
-            else if (employeeMongo.isPresent())
-                return employeeMongo.map(employeeMongo1 -> employeeMongo1);
-            else return Optional.empty();
+            else {
+                final List<Library> libraries = libraryRepository.findAll();
+                return libraries
+                        .stream()
+                        .map(Library::getEmployees)
+                        .flatMap(List::stream)
+                        .filter(employee -> employee.getEmail().equals(email))
+                        .findFirst()
+                        .map(employee -> employee);
+            }
         } else {
             return userRepositoryMySql.findByEmail(email).map(userMySql -> userMySql);
         }
@@ -41,13 +52,19 @@ public class UserRepository {
     public Optional<User> findById(String id) {
         if (Migration.migrationInitialized) {
             Optional<CustomerMongo> customerMongo = customerRepository.findById(id);
-            Optional<EmployeeMongo> employeeMongo = employeeRepository.findById(id);
 
             if (customerMongo.isPresent())
                 return customerMongo.map(customerMongo1 -> customerMongo1);
-            else if (employeeMongo.isPresent())
-                return employeeMongo.map(employeeMongo1 -> employeeMongo1);
-            else return Optional.empty();
+            else {
+                final List<Library> libraries = libraryRepository.findAll();
+                return libraries
+                        .stream()
+                        .map(Library::getEmployees)
+                        .flatMap(List::stream)
+                        .filter(employee -> employee.getId().equals(id))
+                        .findFirst()
+                        .map(employee -> employee);
+            }
         } else {
             return userRepositoryMySql.findById(id).map(userMySql -> userMySql);
         }

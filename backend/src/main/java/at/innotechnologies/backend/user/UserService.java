@@ -1,5 +1,6 @@
 package at.innotechnologies.backend.user;
 
+import at.innotechnologies.backend.response.UserResponse;
 import at.innotechnologies.backend.util.Migration;
 import at.innotechnologies.backend.util.exception.AlreadyExistsException;
 import at.innotechnologies.backend.util.exception.ResourceNotFoundException;
@@ -17,12 +18,12 @@ public class UserService {
     @NonNull
     private UserRepository userRepository;
 
-    public User login(String email) {
-        return userRepository.findByEmail(email.toLowerCase())
+    public UserResponse login(String email) {
+        return userRepository.findByEmail(email.toLowerCase()).map(UserResponse::new)
                 .orElseThrow(() -> new ResourceNotFoundException("user not found"));
     }
 
-    public User register(UserCreationPayload payload) {
+    public UserResponse register(UserCreationPayload payload) {
         userRepository.findByEmail(payload.getEmail().toLowerCase()).ifPresent(user -> {
             throw new AlreadyExistsException("user already exists");
         });
@@ -36,6 +37,6 @@ public class UserService {
         customer.setPhoneNumber(payload.getPhoneNumber());
         customer.setRegistrationDate(LocalDate.now());
 
-        return userRepository.save(customer);
+        return new UserResponse(userRepository.save(customer));
     }
 }

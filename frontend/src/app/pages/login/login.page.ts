@@ -24,10 +24,12 @@ export class LoginPage implements OnInit {
   }
 
   async login() {
-    const library = await firstValueFrom(this.http.get<Library>(environment.apiUrl + "/library/random"));
     const user = await firstValueFrom(this.http.get<User>(environment.apiUrl + "/users/login?email=" + this.email));
+    const library = await firstValueFrom(this.http.get<Library>(environment.apiUrl + "/library/random?userId=" + user.id));
 
-    await this.libraryService.set(library);
+    console.log("is employee: " + user.isEmployee)
+
     await this.userService.login(user);
+    await this.libraryService.set(library);
   }
 }

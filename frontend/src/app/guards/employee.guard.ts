@@ -15,25 +15,23 @@ import {ToastController} from "@ionic/angular";
 @Injectable({
   providedIn: 'root'
 })
-export class LoggedInGuard implements CanActivate, CanLoad {
+export class EmployeeGuard implements CanActivate, CanLoad {
 
   constructor(private userService: UserService, private toastController: ToastController) {
   }
-
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-
-    return this.userService.loggedIn();
+    return this.userService.isEmployee();
   }
 
   canLoad(route: Route, segments: UrlSegment[]): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    const loggedInPromise = this.userService.loggedIn();
+    const isEmployee = this.userService.isEmployee();
 
-    loggedInPromise.then(async value => {
+    isEmployee.then(async value => {
       if (!value) {
         const toast = await this.toastController.create({
-          message: "This page can only be accessed by users who are logged in!",
+          message: "This page can only be accessed by logged in employees!",
           duration: 2000,
           color: "danger"
         });
@@ -41,6 +39,6 @@ export class LoggedInGuard implements CanActivate, CanLoad {
       }
     });
 
-    return loggedInPromise;
+    return isEmployee;
   }
 }

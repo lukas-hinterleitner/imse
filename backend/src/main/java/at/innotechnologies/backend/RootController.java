@@ -1,5 +1,6 @@
 package at.innotechnologies.backend;
 
+import at.innotechnologies.backend.util.DBInitializer;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -12,9 +13,19 @@ public class RootController {
     @NonNull
     private MigrationService migrationService;
 
+    @NonNull
+    private DBInitializer dbInitializer;
+
     @GetMapping
     public ResponseEntity<String> applicationRoot() {
         return ResponseEntity.ok("Backend up");
+    }
+
+    @GetMapping("/import")
+    public ResponseEntity<Boolean> importData() {
+        dbInitializer.importData();
+
+        return ResponseEntity.ok(true);
     }
 
     @GetMapping("/migrate")

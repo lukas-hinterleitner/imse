@@ -35,13 +35,6 @@ export class BorrowPage implements OnInit {
     console.log(this.books)
   }
 
-  async logout() {
-    await this.userService.logout();
-    await this.libraryService.delete();
-
-    await this.router.navigate(["/login"])
-  }
-
   async borrow(roomBook: RoomBook) {
     await firstValueFrom(this.http.post<RoomBook[]>(environment.apiUrl + "/borrow", {
       bookId: roomBook.book.id,
@@ -51,14 +44,14 @@ export class BorrowPage implements OnInit {
       this.books = value;
       const toast = await this.toastController.create({
         message: `"${roomBook.book.name}" was borrowed successfully`,
-        duration: 2500,
+        duration: 2000,
         color: "success"
       });
       await toast.present();
     }).catch(async reason => {
       const toast = await this.toastController.create({
         message: reason.toString(),
-        duration: 2500,
+        duration: 2000,
         color: "danger"
       });
       await toast.present();

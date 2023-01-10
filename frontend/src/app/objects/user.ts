@@ -1,5 +1,5 @@
 export class User {
-  public id: number = -1;
+  public id: string = "";
   public name: string = "";
   public email: string = "";
   public isEmployee: boolean = false;
