@@ -1,7 +1,7 @@
 package at.innotechnologies.backend.library;
 
-import at.innotechnologies.backend.response.BookResponse;
-import at.innotechnologies.backend.response.report.hinterleitner.LibraryResponse;
+import at.innotechnologies.backend.payload.response.BookResponse;
+import at.innotechnologies.backend.payload.response.report.hinterleitner.LibraryResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -32,5 +32,10 @@ public class LibraryController {
     @GetMapping("/report-hinterleitner")
     public ResponseEntity<List<LibraryResponse>> reportHinterleitner() {
         return ResponseEntity.ok(libraryService.reportHinterleitner());
+    }
+
+    @GetMapping("{id}/rooms")
+    public ResponseEntity<List<Room>> getRoomsForLibrary(@NotNull @PathVariable("id") String id) {
+        return ResponseEntity.ok(libraryService.getRoomsForLibrary(id));
     }
 }

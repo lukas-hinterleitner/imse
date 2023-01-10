@@ -13,11 +13,12 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@EqualsAndHashCode
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
 public class RoomMongo implements Room {
 
     @Id
+    @EqualsAndHashCode.Include
     private String id;
 
     @EqualsAndHashCode.Include

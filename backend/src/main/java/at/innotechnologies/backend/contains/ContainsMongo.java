@@ -13,20 +13,23 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@EqualsAndHashCode
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
 public class ContainsMongo implements Contains {
 
     @Id
+    @EqualsAndHashCode.Include
     private String id = UUID.randomUUID().toString();
 
     @DocumentReference
     private BookMongo book;
 
     @Field
+    @EqualsAndHashCode.Include
     private LocalDate deliveryDate;
 
     @Field
+    @EqualsAndHashCode.Include
     private Integer quantity;
 
     @Override

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Library} from "../../objects/library";
 import {environment} from "../../../environments/environment";
@@ -17,7 +17,8 @@ export class LoginPage implements OnInit {
 
   email: string = "";
 
-  constructor(private http: HttpClient, private userService: UserService, private libraryService: LibraryService, private router: Router) { }
+  constructor(private http: HttpClient, private userService: UserService, private libraryService: LibraryService, private router: Router) {
+  }
 
   ngOnInit() {
 

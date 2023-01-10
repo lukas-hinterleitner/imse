@@ -17,8 +17,10 @@ export class HomePage implements OnInit {
   constructor(private http: HttpClient, private toastController: ToastController, public userService: UserService, private libraryService: LibraryService,
               private router: Router) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     console.log(environment.apiUrl);
+    console.log(await this.userService.get());
+    console.log(await this.libraryService.get());
   }
 
   async migrate() {
@@ -45,7 +47,7 @@ export class HomePage implements OnInit {
     await firstValueFrom(this.http.get(environment.apiUrl + "/import"))
       .then(async value => {
         const toast = await this.toastController.create({
-          message: `"import successful!`,
+          message: "import successful!",
           duration: 2000,
           color: "success"
         });

@@ -50,4 +50,13 @@ public class BookRepository {
             return bookRepositoryMySql.findById(id).map(bookMySql -> bookMySql);
         }
     }
+
+    public Optional<Book> findByName(String name) {
+        if (Migration.migrationInitialized) {
+            return bookRepositoryMongo.findByName(name).map(bookMongo -> bookMongo);
+        } else {
+            return bookRepositoryMySql.findByName(name).map(bookMySql -> bookMySql);
+        }
+    }
+
 }

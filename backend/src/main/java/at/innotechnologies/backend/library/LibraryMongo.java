@@ -14,12 +14,13 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@EqualsAndHashCode
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
 @Document(collection = "libraries")
 public class LibraryMongo implements Library {
 
     @Id
+    @EqualsAndHashCode.Include
     private String id;
 
     @Field

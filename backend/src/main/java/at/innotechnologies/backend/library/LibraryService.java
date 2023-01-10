@@ -1,10 +1,9 @@
 package at.innotechnologies.backend.library;
 
-import at.innotechnologies.backend.book.Book;
 import at.innotechnologies.backend.contains.Contains;
-import at.innotechnologies.backend.response.BookResponse;
-import at.innotechnologies.backend.response.report.hinterleitner.LibraryResponse;
-import at.innotechnologies.backend.response.report.hinterleitner.RoomResponse;
+import at.innotechnologies.backend.payload.response.BookResponse;
+import at.innotechnologies.backend.payload.response.report.hinterleitner.LibraryResponse;
+import at.innotechnologies.backend.payload.response.report.hinterleitner.RoomResponse;
 import at.innotechnologies.backend.user.Customer;
 import at.innotechnologies.backend.user.User;
 import at.innotechnologies.backend.user.UserRepository;
@@ -18,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -49,6 +47,12 @@ public class LibraryService {
 
     public List<BookResponse> getBooksForLibrary(String libraryId) {
         return libraryHelper.getBooksForLibrary(libraryId);
+    }
+
+    public List<Room> getRoomsForLibrary(String libraryId) {
+        final Library library = libraryRepository.findById(libraryId).orElseThrow();
+
+        return library.getRooms();
     }
 
     public List<LibraryResponse> reportHinterleitner() {

@@ -13,21 +13,15 @@
         </p>
       </ion-col>
     </ion-row>
-    <ion-row *ngFor="let library of libraries">
-      <ion-col>
-        <h1>{{library.name}}</h1>
-        <h4>Rooms:</h4>
-        <ion-card *ngFor="let room of library.rooms">
-          <ion-card-header>
-            <ion-card-title>{{room.name}}</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <ion-item *ngFor="let book of room.books">
-              {{book.book.name}} - Quantity: {{book.quantity}}
-            </ion-item>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-    </ion-row>
+    <ion-card *ngFor="let library of libraries">
+      <ion-card-header>
+        <ion-card-title>{{library.name}}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item *ngFor="let book of library.books">
+          {{book.book.name}}, Pages: {{book.book.amountPages}} - Quantity: {{book.quantity}}
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
   </ion-grid>
 </ion-content>

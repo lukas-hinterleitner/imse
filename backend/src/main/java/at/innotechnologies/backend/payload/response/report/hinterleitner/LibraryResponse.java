@@ -1,4 +1,4 @@
-package at.innotechnologies.backend.response.report.hinterleitner;
+package at.innotechnologies.backend.payload.response.report.hinterleitner;
 
 import lombok.Data;
 

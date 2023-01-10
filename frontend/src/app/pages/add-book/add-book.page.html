@@ -1,9 +1,70 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>add-book</ion-title>
+    <ion-title>Add book</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="ion-align-items-center ion-justify-content-center">
+  <ion-grid style="top: 30%; position: relative">
+    <ion-row>
+      <ion-col></ion-col>
+      <ion-col size="6">
+        <!-- first step -->
+        <div>
+          <ion-item [hidden]="nameAlreadyEntered" fill="outline">
+            <ion-label position="floating">Book name</ion-label>
+            <ion-input [(ngModel)]="bookName" required="true" type="text"></ion-input>
+          </ion-item>
+          <br>
+          <ion-button [disabled]="bookName === ''" [hidden]="nameAlreadyEntered" (click)="nameEntered()" expand="block" size="large">next</ion-button>
+        </div>
 
+
+        <!-- next step (book exists) -->
+        <div [hidden]="!nameAlreadyEntered">
+          <div [hidden]="!bookExists">
+            <ion-item>
+              <ion-label>{{bookName}}</ion-label>
+            </ion-item>
+            <br>
+            <ion-item fill="outline">
+              <ion-label position="floating">Quantity</ion-label>
+              <ion-input [(ngModel)]="quantity" required="true" type="number"></ion-input>
+            </ion-item>
+            <br>
+            <ion-button (click)="addExistingBook()" expand="block" size="large">add book</ion-button>
+          </div>
+        </div>
+
+
+        <!-- next step (book doesn't exist) -->
+        <div [hidden]="!nameAlreadyEntered">
+          <div [hidden]="bookExists">
+            <ion-item>
+              <ion-label>{{bookName}}</ion-label>
+            </ion-item>
+            <br>
+            <ion-item fill="outline">
+              <ion-label position="floating">Quantity</ion-label>
+              <ion-input [(ngModel)]="quantity" required="true" type="number"></ion-input>
+            </ion-item>
+            <br>
+            <ion-item fill="outline">
+              <ion-label position="floating">Amount of Pages</ion-label>
+              <ion-input [(ngModel)]="amountPages" required="true" type="number"></ion-input>
+            </ion-item>
+            <br>
+              <ion-item>
+                <ion-select [compareWith]="compareWith" (ionChange)="roomChanged($event)" placeholder="Select room">
+                  <ion-select-option *ngFor="let room of rooms" [value]="room">{{room.name}}</ion-select-option>
+                </ion-select>
+              </ion-item>
+            <br>
+            <ion-button [disabled]="selectedRoom === undefined || quantity === undefined || amountPages === undefined" (click)="addBook()" expand="block" size="large">add new book</ion-button>
+          </div>
+        </div>
+      </ion-col>
+      <ion-col></ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

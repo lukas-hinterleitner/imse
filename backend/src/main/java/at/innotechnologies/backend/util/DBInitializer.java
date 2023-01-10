@@ -8,8 +8,6 @@ import at.innotechnologies.backend.user.*;
 import com.github.javafaker.Faker;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,7 +30,7 @@ public class DBInitializer {
     private void addRoomsToLibrary(Library library) {
         Room technology = new RoomMySql();
         technology.setName("Technology");
-        technology.setCapacity(10000);
+        technology.setCapacity(20000);
         library.addRoom(technology);
         ((RoomMySql)technology).setRoomPrimaryKey(new RoomPrimaryKey(library.getId(), UUID.randomUUID().toString()));
 
@@ -40,7 +38,7 @@ public class DBInitializer {
 
         Room medicine = new RoomMySql();
         medicine.setName("Medicine");
-        medicine.setCapacity(10000);
+        medicine.setCapacity(20000);
         library.addRoom(medicine);
         ((RoomMySql)medicine).setRoomPrimaryKey(new RoomPrimaryKey(library.getId(), UUID.randomUUID().toString()));
 
@@ -48,7 +46,7 @@ public class DBInitializer {
 
         Room nature = new RoomMySql();
         nature.setName("Nature");
-        nature.setCapacity(10000);
+        nature.setCapacity(20000);
         library.addRoom(nature);
         ((RoomMySql)nature).setRoomPrimaryKey(new RoomPrimaryKey(library.getId(), UUID.randomUUID().toString()));
 

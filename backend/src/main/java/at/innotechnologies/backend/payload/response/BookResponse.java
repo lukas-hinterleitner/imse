@@ -1,4 +1,4 @@
-package at.innotechnologies.backend.response;
+package at.innotechnologies.backend.payload.response;
 
 import at.innotechnologies.backend.book.Book;
 import lombok.AllArgsConstructor;

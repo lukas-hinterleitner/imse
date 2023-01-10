@@ -7,7 +7,8 @@ import at.innotechnologies.backend.contains.ContainsRepository;
 import at.innotechnologies.backend.library.Library;
 import at.innotechnologies.backend.library.LibraryRepository;
 import at.innotechnologies.backend.library.Room;
-import at.innotechnologies.backend.response.BookResponse;
+import at.innotechnologies.backend.payload.response.BookResponse;
+import at.innotechnologies.backend.payload.response.report.arostegui.LibraryResponse;
 import at.innotechnologies.backend.user.User;
 import at.innotechnologies.backend.user.UserRepository;
 import at.innotechnologies.backend.util.LibraryHelper;
@@ -18,7 +19,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +43,10 @@ public class BorrowService {
 
     @NonNull
     private LibraryHelper libraryHelper;
+
+    private Library getLibraryFromRoom(List<Library> libraries, Room room) {
+        return libraries.stream().filter(library -> library.getRooms().contains(room)).findFirst().orElseThrow();
+    }
 
     @Transactional
     public List<BookResponse> borrowBook(BorrowBookPayload borrowBookPayload) {
@@ -75,5 +82,35 @@ public class BorrowService {
         borrowsRepository.save(borrows);
 
         return libraryHelper.getBooksForLibrary(library.getId());
+    }
+
+    @Transactional(readOnly = true)
+    public List<LibraryResponse> reportArostegui() {
+        final List<Borrows> borrowedBooks = borrowsRepository.findAll().stream().filter(borrows -> borrows.getBook().getAmountPages() > 200).toList();
+        final List<Library> libraries = libraryRepository.findAll();
+
+        final Map<Library, Map<Book, Integer>> booksBorrowedPerLibrary = new HashMap<>();
+
+        for (final Borrows borrows: borrowedBooks) {
+            final Library library = getLibraryFromRoom(libraries, borrows.getRoom());
+
+            final Map<Book, Integer> alreadyCountedBooks = booksBorrowedPerLibrary.getOrDefault(library, new HashMap<>());
+            final Integer quantity = alreadyCountedBooks.getOrDefault(borrows.getBook(), 0) + 1;
+
+            alreadyCountedBooks.put(borrows.getBook(), quantity);
+            booksBorrowedPerLibrary.put(library, alreadyCountedBooks);
+        }
+
+        return booksBorrowedPerLibrary.keySet().stream().map(library -> {
+            final Map<Book, Integer> booksAndQuantities = booksBorrowedPerLibrary.get(library);
+
+            final List<BookResponse> books = booksAndQuantities
+                    .keySet()
+                    .stream()
+                    .map(book -> new BookResponse(book, booksAndQuantities.getOrDefault(book, 0)))
+                    .toList();
+
+            return new LibraryResponse(library.getName(), books);
+        }).toList();
     }
 }

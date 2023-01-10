@@ -1,6 +1,6 @@
 package at.innotechnologies.backend.user;
 
-import at.innotechnologies.backend.response.UserResponse;
+import at.innotechnologies.backend.payload.response.UserResponse;
 import at.innotechnologies.backend.util.Migration;
 import at.innotechnologies.backend.util.exception.AlreadyExistsException;
 import at.innotechnologies.backend.util.exception.ResourceNotFoundException;

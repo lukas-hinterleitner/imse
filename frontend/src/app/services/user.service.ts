@@ -14,7 +14,12 @@ export class UserService {
 
   async login(user: User) {
     await this.storage.set(this.userKey, user);
-    await this.router.navigate(["/borrow"])
+
+    if (user.isEmployee) {
+      await this.router.navigate(["/add-book"])
+    } else {
+      await this.router.navigate(["/borrow"])
+    }
   }
 
   async logout() {

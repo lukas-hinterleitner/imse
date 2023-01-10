@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import {firstValueFrom} from "rxjs";
+import {environment} from "../../../environments/environment";
+import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'app-report-arostegui',
@@ -7,9 +10,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ReportArosteguiPage implements OnInit {
 
-  constructor() { }
+  public libraries: any[] = Array();
 
-  ngOnInit() {
+  constructor(private http: HttpClient) { }
+
+  async ngOnInit() {
+    this.libraries = await firstValueFrom(this.http.get<Object[]>(environment.apiUrl + "/borrow/report-arogestui"));
+    console.log(this.libraries)
   }
 
 }

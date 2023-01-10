@@ -16,10 +16,11 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Table(name = "library")
 @Data
-@EqualsAndHashCode
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
 public class LibraryMySql implements Library {
     @Id
+    @EqualsAndHashCode.Include
     private String id = UUID.randomUUID().toString();
 
     @Column(nullable = false)

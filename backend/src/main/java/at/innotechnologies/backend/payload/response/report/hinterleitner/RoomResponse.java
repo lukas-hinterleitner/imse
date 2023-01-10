@@ -1,6 +1,6 @@
-package at.innotechnologies.backend.response.report.hinterleitner;
+package at.innotechnologies.backend.payload.response.report.hinterleitner;
 
-import at.innotechnologies.backend.response.BookResponse;
+import at.innotechnologies.backend.payload.response.BookResponse;
 import lombok.Data;
 
 import java.util.ArrayList;

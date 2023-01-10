@@ -16,7 +16,7 @@ export class LibraryService {
     await this.storage.set(this.libraryKey, library);
   }
 
-  async get() {
+  async get(): Promise<Library> {
     return await this.storage.get(this.libraryKey);
   }
 

@@ -1,6 +1,6 @@
 package at.innotechnologies.backend.user;
 
-import at.innotechnologies.backend.response.UserResponse;
+import at.innotechnologies.backend.payload.response.UserResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
