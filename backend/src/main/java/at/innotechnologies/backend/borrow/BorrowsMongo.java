@@ -8,6 +8,7 @@ import at.innotechnologies.backend.user.User;
 import at.innotechnologies.backend.user.UserMongo;
 import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -29,10 +30,11 @@ public class BorrowsMongo implements Borrows {
     private UserMongo user;
 
     @DocumentReference
+    @Field
     private BookMongo book;
 
-    @DocumentReference
-    private RoomMongo room;
+    @Field
+    private String roomId;
 
     @Field
     private LocalDate startDate;
@@ -52,6 +54,6 @@ public class BorrowsMongo implements Borrows {
 
     @Override
     public void setRoom(Room room) {
-        this.room = (RoomMongo) room;
+        this.roomId = room.getId();
     }
 }

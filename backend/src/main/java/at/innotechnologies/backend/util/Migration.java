@@ -4,6 +4,7 @@ import at.innotechnologies.backend.book.Book;
 import at.innotechnologies.backend.book.BookMongo;
 import at.innotechnologies.backend.borrow.Borrows;
 import at.innotechnologies.backend.borrow.BorrowsMongo;
+import at.innotechnologies.backend.borrow.BorrowsMySql;
 import at.innotechnologies.backend.contains.Contains;
 import at.innotechnologies.backend.contains.ContainsMongo;
 import at.innotechnologies.backend.library.Library;
@@ -128,7 +129,7 @@ public class Migration {
 
             borrowsMongo.setId(borrows.getId());
             borrowsMongo.setBook(bookToMongo(borrows.getBook()));
-            borrowsMongo.setRoom(roomToMongo(borrows.getRoom()));
+            borrowsMongo.setRoomId(((BorrowsMySql)borrows).getRoom().getId());
             borrowsMongo.setUser(userToMongo(borrows.getUser()));
             borrowsMongo.setStartDate(borrows.getStartDate());
             borrowsMongo.setEndDate(borrows.getEndDate());

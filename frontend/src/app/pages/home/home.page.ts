@@ -27,7 +27,7 @@ export class HomePage implements OnInit {
     await firstValueFrom(this.http.get(environment.apiUrl + "/migrate"))
       .then(async value => {
         const toast = await this.toastController.create({
-          message: `"migration to mongo db successful!`,
+          message: `migration to mongo db successful!`,
           duration: 2500,
           color: "success"
         });

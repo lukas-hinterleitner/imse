@@ -8,6 +8,7 @@ import {Book} from "../../objects/book";
 import {Room} from "../../objects/room";
 import {ToastController} from "@ionic/angular";
 import {library} from "ionicons/icons";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-add-book',
@@ -29,7 +30,8 @@ export class AddBookPage implements OnInit {
 
   existingBook: Book | undefined = undefined;
 
-  constructor(private http: HttpClient, private libraryService: LibraryService, private toastController: ToastController) { }
+  constructor(private http: HttpClient, private libraryService: LibraryService, private toastController: ToastController,
+              private router: Router) { }
 
   async ngOnInit() {
     this.library = await this.libraryService.get();
@@ -44,7 +46,6 @@ export class AddBookPage implements OnInit {
       .then(value => {
         this.bookExists = true;
         this.existingBook = value;
-        console.log(value)
       }).catch(reason => {
         console.log("doesn't exist")
       });
@@ -52,7 +53,6 @@ export class AddBookPage implements OnInit {
     this.nameAlreadyEntered = true;
 
     this.rooms = await firstValueFrom(this.http.get<Room[]>(environment.apiUrl + "/library/" + this.library?.id + "/rooms"));
-    console.log(this.rooms)
   }
 
   compareWith(o1: any, o2: any) {
@@ -80,7 +80,9 @@ export class AddBookPage implements OnInit {
       await toast.present();
     }).catch(reason => {
       console.log(reason);
-    })
+    });
+
+    await this.router.navigate(['/add-book']);
   }
 
   async addExistingBook() {
@@ -97,5 +99,7 @@ export class AddBookPage implements OnInit {
     }).catch(reason => {
       console.log(reason);
     })
+
+    await this.router.navigate(['/add-book']);
   }
 }

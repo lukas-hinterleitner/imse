@@ -19,7 +19,6 @@
           <ion-button [disabled]="bookName === ''" [hidden]="nameAlreadyEntered" (click)="nameEntered()" expand="block" size="large">next</ion-button>
         </div>
 
-
         <!-- next step (book exists) -->
         <div [hidden]="!nameAlreadyEntered">
           <div [hidden]="!bookExists">
@@ -35,7 +34,6 @@
             <ion-button (click)="addExistingBook()" expand="block" size="large">add book</ion-button>
           </div>
         </div>
-
 
         <!-- next step (book doesn't exist) -->
         <div [hidden]="!nameAlreadyEntered">

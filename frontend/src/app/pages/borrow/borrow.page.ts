@@ -10,6 +10,7 @@ import {environment} from "../../../environments/environment";
 import {firstValueFrom} from "rxjs";
 import {RoomBook} from "../../objects/roomBook";
 import {ToastController} from "@ionic/angular";
+import {book} from "ionicons/icons";
 
 @Component({
   selector: 'app-borrow',
@@ -41,7 +42,12 @@ export class BorrowPage implements OnInit {
       libraryId: this.library?.id,
       userId: this.user?.id
     })).then(async value => {
-      this.books = value;
+      //this.books = value;
+      this.books.forEach(book => {
+        if (book.book.id === roomBook.book.id) {
+          book.quantity--;
+        }
+      })
       const toast = await this.toastController.create({
         message: `"${roomBook.book.name}" was borrowed successfully`,
         duration: 2000,

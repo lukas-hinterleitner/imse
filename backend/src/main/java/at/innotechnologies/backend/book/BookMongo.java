@@ -27,5 +27,4 @@ public class BookMongo implements Book {
 
     @Field
     private Integer amountPages;
-
 }

@@ -59,7 +59,7 @@ public class BookService {
         contains.setBook(book);
         contains.setDeliveryDate(LocalDate.now());
 
-        room.getContains().add(contains);
+        room.addContains(contains);
 
         if (Migration.migrationInitialized) {
             libraryRepository.save(library);

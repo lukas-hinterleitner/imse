@@ -36,5 +36,10 @@ public class RoomMongo implements Room {
         return this.contains.stream().map(containsMongo -> (Contains) containsMongo).collect(Collectors.toSet());
     }
 
+    @Override
+    public void addContains(Contains contains) {
+        this.contains.add((ContainsMongo) contains);
+    }
+
 
 }

@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,8 +45,12 @@ public class BorrowService {
     @NonNull
     private LibraryHelper libraryHelper;
 
-    private Library getLibraryFromRoom(List<Library> libraries, Room room) {
-        return libraries.stream().filter(library -> library.getRooms().contains(room)).findFirst().orElseThrow();
+    private Library getLibraryFromBorrows(List<Library> libraries, Borrows borrows) {
+        if (Migration.migrationInitialized) {
+            return libraries.stream().filter(library -> library.getRooms().stream().anyMatch(room1 -> room1.getId().equals(((BorrowsMongo)borrows).getRoomId()))).findFirst().orElseThrow();
+        } else {
+            return libraries.stream().filter(library -> library.getRooms().stream().anyMatch(room1 -> room1.getId().equals(((BorrowsMySql)borrows).getRoom().getId()))).findFirst().orElseThrow();
+        }
     }
 
     @Transactional
@@ -64,6 +69,7 @@ public class BorrowService {
         borrows.setBook(book);
         borrows.setUser(user);
         borrows.setRoom(room);
+
         borrows.setStartDate(LocalDate.now());
         borrows.setEndDate(LocalDate.now().plusMonths(2));
 
@@ -92,7 +98,7 @@ public class BorrowService {
         final Map<Library, Map<Book, Integer>> booksBorrowedPerLibrary = new HashMap<>();
 
         for (final Borrows borrows: borrowedBooks) {
-            final Library library = getLibraryFromRoom(libraries, borrows.getRoom());
+            final Library library = getLibraryFromBorrows(libraries, borrows);
 
             final Map<Book, Integer> alreadyCountedBooks = booksBorrowedPerLibrary.getOrDefault(library, new HashMap<>());
             final Integer quantity = alreadyCountedBooks.getOrDefault(borrows.getBook(), 0) + 1;
@@ -108,9 +114,10 @@ public class BorrowService {
                     .keySet()
                     .stream()
                     .map(book -> new BookResponse(book, booksAndQuantities.getOrDefault(book, 0)))
+                    .sorted(Comparator.comparing(bookResponse -> bookResponse.getBook().getName()))
                     .toList();
 
             return new LibraryResponse(library.getName(), books);
-        }).toList();
+        }).sorted(Comparator.comparing(LibraryResponse::getName)).toList();
     }
 }

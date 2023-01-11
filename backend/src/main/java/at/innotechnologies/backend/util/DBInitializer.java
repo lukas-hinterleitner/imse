@@ -104,6 +104,7 @@ public class DBInitializer {
 
                 for (int i = 0; i < 20; i++) {
                     Employee employee = new EmployeeMySql();
+
                     employee.setName(faker.name().fullName());
                     employee.setEmail(faker.internet().safeEmailAddress());
                     employee.setSalary((double) faker.number().numberBetween(2000, 5000));

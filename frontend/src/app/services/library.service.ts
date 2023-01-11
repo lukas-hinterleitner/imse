@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Storage} from "@ionic/storage-angular";
-import {User} from "../objects/user";
 import {Library} from "../objects/library";
+import {BehaviorSubject, Observable, of, Subject} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -9,11 +9,13 @@ import {Library} from "../objects/library";
 export class LibraryService {
 
   private libraryKey: string = "LIBRARY";
+  public libraryName: Subject<Library | null> = new BehaviorSubject<Library | null>(null);
 
   constructor(private storage: Storage) { }
 
   async set(library: Library) {
     await this.storage.set(this.libraryKey, library);
+    this.libraryName.next(library);
   }
 
   async get(): Promise<Library> {
@@ -26,5 +28,6 @@ export class LibraryService {
 
   async delete() {
     await this.storage.remove(this.libraryKey);
+    this.libraryName.next(null);
   }
 }

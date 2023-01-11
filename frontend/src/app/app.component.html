@@ -3,8 +3,8 @@
     <ion-menu contentId="main-content" type="overlay">
       <ion-content>
         <ion-list id="inbox-list">
-          <ion-list-header>Library</ion-list-header>
-          <ion-note></ion-note>
+          <ion-list-header>{{library ? library.name : "Welcome!"}}</ion-list-header>
+          <ion-note>{{library ? library.addressStreet : "-"}}</ion-note>
 
           <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
             <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" routerLinkActive="selected">

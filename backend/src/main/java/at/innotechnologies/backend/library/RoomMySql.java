@@ -56,4 +56,9 @@ public class RoomMySql implements Room {
     public String getId() {
         return this.roomPrimaryKey.getRoomId();
     }
+
+    @Override
+    public void addContains(Contains contains) {
+        this.contains.add((ContainsMySql) contains);
+    }
 }

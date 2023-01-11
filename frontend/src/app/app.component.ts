@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import {Storage} from "@ionic/storage-angular";
+import {LibraryService} from "./services/library.service";
+import {Library} from "./objects/library";
 
 @Component({
   selector: 'app-root',
@@ -20,10 +22,13 @@ export class AppComponent {
     {title: 'Report Hinterleitner', url: "/report-hinterleitner", icon: "analytics"}
   ]
 
-  constructor(private storage: Storage) {
+  public library: Library | null = null;
+
+  constructor(private storage: Storage, private libraryService: LibraryService) {
   }
 
   async ngOnInit() {
     await this.storage.create();
+    this.libraryService.libraryName.asObservable().subscribe(value => this.library = value);
   }
 }
