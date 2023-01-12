@@ -15,7 +15,7 @@ export class ReportArosteguiPage implements OnInit {
   constructor(private http: HttpClient) { }
 
   async ngOnInit() {
-    this.libraries = await firstValueFrom(this.http.get<Object[]>(environment.apiUrl + "/borrow/report-arogestui"));
+    this.libraries = await firstValueFrom(this.http.get<Object[]>(environment.apiUrl + "/borrow/report-arostegui"));
     console.log(this.libraries)
   }
 

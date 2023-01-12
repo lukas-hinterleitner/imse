@@ -25,7 +25,7 @@ public class BorrowController {
         return ResponseEntity.ok(borrowService.borrowBook(borrowBookPayload));
     }
 
-    @GetMapping("/report-arogestui")
+    @GetMapping("/report-arostegui")
     public ResponseEntity<List<LibraryResponse>> reportArostegui() {
         return ResponseEntity.ok(borrowService.reportArostegui());
     }
