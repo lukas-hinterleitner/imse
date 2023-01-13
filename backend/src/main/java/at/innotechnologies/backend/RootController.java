@@ -18,7 +18,7 @@ public class RootController {
 
     @GetMapping
     public ResponseEntity<String> applicationRoot() {
-        return ResponseEntity.ok("Backend up");
+        return ResponseEntity.ok("Backend up. wuhu");
     }
 
     @GetMapping("/import")

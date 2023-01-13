@@ -25,4 +25,8 @@ public class EmployeeMySql extends UserMySql implements Employee {
     @ManyToOne(targetEntity = LibraryMySql.class, optional = false)
     @JoinColumn(name = "libraryId", referencedColumnName = "id")
     private LibraryMySql library;
+
+    @ManyToOne(targetEntity = EmployeeMySql.class)
+    @JoinColumn(name = "supervisorId", referencedColumnName = "id")
+    private EmployeeMySql supervisor;
 }

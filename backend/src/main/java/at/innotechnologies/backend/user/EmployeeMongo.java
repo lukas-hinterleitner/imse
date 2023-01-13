@@ -17,4 +17,11 @@ public class EmployeeMongo extends UserMongo implements Employee {
 
     @Field
     private Double salary;
+
+    @Field
+    private String supervisorId;
+
+    public void setSupervisor(Employee employee) {
+        this.supervisorId = employee.getId();
+    }
 }

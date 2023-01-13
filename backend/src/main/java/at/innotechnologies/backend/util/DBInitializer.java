@@ -102,6 +102,15 @@ public class DBInitializer {
 
                 employee1 = (Employee) userRepository.save(employee1);
 
+                Employee employee2 = new EmployeeMySql();
+                employee2.setName("Mitarbeiter 2");
+                employee2.setEmail("mitarbeiter2@library.com");
+                employee2.setSalary(5000.0);
+                employee2.setHiringDate(LocalDate.now());
+                ((EmployeeMySql)employee2).setLibrary((LibraryMySql) libraries.get(1));
+
+                employee2 = (Employee) userRepository.save(employee2);
+
                 for (int i = 0; i < 20; i++) {
                     Employee employee = new EmployeeMySql();
 
@@ -110,7 +119,14 @@ public class DBInitializer {
                     employee.setSalary((double) faker.number().numberBetween(2000, 5000));
                     employee.setHiringDate(LocalDate.of(2022, faker.number().numberBetween(1, 12), faker.number().numberBetween(1, 28)));
 
-                    ((EmployeeMySql)employee).setLibrary((LibraryMySql) libraries.get(faker.number().numberBetween(0, numLibraries)));
+                    final Library library = libraries.get(faker.number().numberBetween(0, numLibraries));
+                    ((EmployeeMySql)employee).setLibrary((LibraryMySql) library);
+
+                    if (library.getId().equals(libraries.get(0).getId())) {
+                        ((EmployeeMySql)employee).setSupervisor((EmployeeMySql) employee1);
+                    } else {
+                        ((EmployeeMySql)employee).setSupervisor((EmployeeMySql) employee2);
+                    }
 
                     employee = (Employee) userRepository.save(employee);
                 }
