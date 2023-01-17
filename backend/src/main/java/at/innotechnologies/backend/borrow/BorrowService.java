@@ -92,7 +92,11 @@ public class BorrowService {
 
     @Transactional(readOnly = true)
     public List<LibraryResponse> reportArostegui() {
-        final List<Borrows> borrowedBooks = borrowsRepository.findAll().stream().filter(borrows -> borrows.getBook().getAmountPages() > 200).toList();
+        final List<Borrows> borrowedBooks = borrowsRepository
+                .findAll()
+                .stream()
+                .filter(borrows -> borrows.getBook().getAmountPages() > 200)
+                .toList();
         final List<Library> libraries = libraryRepository.findAll();
 
         final Map<Library, Map<Book, Integer>> booksBorrowedPerLibrary = new HashMap<>();

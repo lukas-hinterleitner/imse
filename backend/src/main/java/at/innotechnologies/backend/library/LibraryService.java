@@ -13,10 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -49,22 +46,22 @@ public class LibraryService {
         return libraryHelper.getBooksForLibrary(libraryId);
     }
 
-    public List<Room> getRoomsForLibrary(String libraryId) {
+    public Set<Room> getRoomsForLibrary(String libraryId) {
         final Library library = libraryRepository.findById(libraryId).orElseThrow();
-
-        return library.getRooms();
+        System.out.println(library.getRooms().size());
+        return new HashSet<>(library.getRooms());
     }
 
+    @Transactional(readOnly = true)
     public List<LibraryResponse> reportHinterleitner() {
         final List<Library> libraries = libraryRepository.findAll();
-
         final List<LibraryResponse> libraryResponses = new ArrayList<>();
 
-        for (Library library: libraries) {
+        for (final Library library: libraries) {
             final LibraryResponse libraryResponse = new LibraryResponse();
             libraryResponse.setName(library.getName());
 
-            for (Room room: library.getRooms()) {
+            for (final Room room: library.getRooms()) {
                 final RoomResponse roomResponse = new RoomResponse();
                 roomResponse.setName(room.getName());
 
@@ -74,7 +71,7 @@ public class LibraryService {
                         .sorted(Comparator.comparing(contains -> contains.getBook().getName()))
                         .toList();
 
-                for (Contains contains: sortedBooks) {
+                for (final Contains contains: sortedBooks) {
                     final BookResponse bookResponse = new BookResponse(contains.getBook(), contains.getQuantity());
                     roomResponse.getBooks().add(bookResponse);
                 }

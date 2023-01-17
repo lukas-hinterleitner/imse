@@ -33,7 +33,7 @@ public class LibraryMySql implements Library {
     private String addressCity;
 
     @JsonIgnore
-    @OneToMany(targetEntity = RoomMySql.class, mappedBy = "library")
+    @OneToMany(targetEntity = RoomMySql.class, mappedBy = "library", fetch = FetchType.EAGER)
     private List<RoomMySql> rooms = new ArrayList<>();
 
     @JsonIgnore

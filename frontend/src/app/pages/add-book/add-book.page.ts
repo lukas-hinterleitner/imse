@@ -53,6 +53,7 @@ export class AddBookPage implements OnInit {
     this.nameAlreadyEntered = true;
 
     this.rooms = await firstValueFrom(this.http.get<Room[]>(environment.apiUrl + "/library/" + this.library?.id + "/rooms"));
+    console.log(this.rooms);
   }
 
   compareWith(o1: any, o2: any) {

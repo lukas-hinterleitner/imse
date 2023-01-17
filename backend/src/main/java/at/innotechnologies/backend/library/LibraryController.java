@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/library")
@@ -35,7 +36,7 @@ public class LibraryController {
     }
 
     @GetMapping("{id}/rooms")
-    public ResponseEntity<List<Room>> getRoomsForLibrary(@NotNull @PathVariable("id") String id) {
+    public ResponseEntity<Set<Room>> getRoomsForLibrary(@NotNull @PathVariable("id") String id) {
         return ResponseEntity.ok(libraryService.getRoomsForLibrary(id));
     }
 }

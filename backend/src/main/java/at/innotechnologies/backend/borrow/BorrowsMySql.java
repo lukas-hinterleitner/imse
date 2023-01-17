@@ -27,7 +27,7 @@ public class BorrowsMySql implements Borrows {
     @JoinColumn(name = "userId", nullable = false, updatable = false)
     private UserMySql user;
 
-    @ManyToOne(targetEntity = BookMySql.class)
+    @ManyToOne(targetEntity = BookMySql.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "bookId", nullable = false, updatable = false)
     private BookMySql book;
 

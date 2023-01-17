@@ -57,6 +57,7 @@ public class DBInitializer {
         nature = roomRepository.save(nature);
     }
 
+    @Transactional
     public void importData() {
         final Faker faker = new Faker();
 
@@ -97,6 +98,8 @@ public class DBInitializer {
 
                 customer1 = (Customer) userRepository.save(customer1);
 
+                users.add(customer1);
+
                 Employee employee1 = new EmployeeMySql();
                 employee1.setName("Mitarbeiter 1");
                 employee1.setEmail("mitarbeiter1@library.com");
@@ -106,6 +109,8 @@ public class DBInitializer {
 
                 employee1 = (Employee) userRepository.save(employee1);
 
+                users.add(employee1);
+
                 Employee employee2 = new EmployeeMySql();
                 employee2.setName("Mitarbeiter 2");
                 employee2.setEmail("mitarbeiter2@library.com");
@@ -114,6 +119,8 @@ public class DBInitializer {
                 ((EmployeeMySql)employee2).setLibrary((LibraryMySql) libraries.get(1));
 
                 employee2 = (Employee) userRepository.save(employee2);
+
+                users.add(employee2);
 
                 for (int i = 0; i < 20; i++) {
                     Employee employee = new EmployeeMySql();
@@ -133,6 +140,8 @@ public class DBInitializer {
                     }
 
                     employee = (Employee) userRepository.save(employee);
+
+                    users.add(employee);
                 }
             }
 
@@ -159,11 +168,14 @@ public class DBInitializer {
                 }
             }
 
+            System.out.println(users.size());
+
             for (int i = 0; i < 200; i++) {
                 Borrows borrows = new BorrowsMySql();
 
                 borrows.setStartDate(LocalDate.now());
                 borrows.setEndDate(LocalDate.now().plusMonths(2));
+
                 borrows.setUser(users.get(faker.number().numberBetween(0, users.size())));
 
                 final Library library = libraries.get(faker.number().numberBetween(0, numLibraries));
