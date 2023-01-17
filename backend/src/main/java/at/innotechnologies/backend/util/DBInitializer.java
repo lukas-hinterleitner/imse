@@ -164,11 +164,11 @@ public class DBInitializer {
 
                 borrows.setStartDate(LocalDate.now());
                 borrows.setEndDate(LocalDate.now().plusMonths(2));
-                borrows.setUser(users.get(faker.random().nextInt(0, users.size())));
+                borrows.setUser(users.get(faker.number().numberBetween(0, users.size())));
 
                 final Library library = libraries.get(faker.number().numberBetween(0, numLibraries));
-                borrows.setRoom(library.getRooms().get(faker.random().nextInt(0, library.getRooms().size())));
-                borrows.setBook(books.get(faker.random().nextInt(0, books.size())));
+                borrows.setRoom(library.getRooms().get(faker.number().numberBetween(0, library.getRooms().size())));
+                borrows.setBook(books.get(faker.number().numberBetween(0, books.size())));
 
                 borrowsRepository.save(borrows);
             }
