@@ -8,7 +8,6 @@ import java.time.LocalDate;
 
 public interface Borrows {
     Book getBook();
-    User getUser();
     LocalDate getStartDate();
     LocalDate getEndDate();
     String getId();

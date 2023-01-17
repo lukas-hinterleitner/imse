@@ -129,8 +129,8 @@ public class Migration {
 
             borrowsMongo.setId(borrows.getId());
             borrowsMongo.setBook(bookToMongo(borrows.getBook()));
-            borrowsMongo.setRoomId(((BorrowsMySql)borrows).getRoom().getId());
-            borrowsMongo.setUser(userToMongo(borrows.getUser()));
+            borrowsMongo.setRoom(((BorrowsMySql)borrows).getRoom());
+            borrowsMongo.setUser(userToMongo(((BorrowsMySql)borrows).getUser()));
             borrowsMongo.setStartDate(borrows.getStartDate());
             borrowsMongo.setEndDate(borrows.getEndDate());
 

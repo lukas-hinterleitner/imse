@@ -47,7 +47,7 @@ public class BorrowService {
 
     private Library getLibraryFromBorrows(List<Library> libraries, Borrows borrows) {
         if (Migration.migrationInitialized) {
-            return libraries.stream().filter(library -> library.getRooms().stream().anyMatch(room1 -> room1.getId().equals(((BorrowsMongo)borrows).getRoomId()))).findFirst().orElseThrow();
+            return libraries.stream().filter(library -> library.getRooms().stream().anyMatch(room1 -> room1.getId().equals(((BorrowsMongo)borrows).getRoom()))).findFirst().orElseThrow();
         } else {
             return libraries.stream().filter(library -> library.getRooms().stream().anyMatch(room1 -> room1.getId().equals(((BorrowsMySql)borrows).getRoom().getId()))).findFirst().orElseThrow();
         }

@@ -27,14 +27,13 @@ public class BorrowsMongo implements Borrows {
     private String id;
 
     @Field
-    private UserMongo user;
+    private String user;
 
     @DocumentReference
-    @Field
     private BookMongo book;
 
     @Field
-    private String roomId;
+    private String room;
 
     @Field
     private LocalDate startDate;
@@ -49,11 +48,11 @@ public class BorrowsMongo implements Borrows {
 
     @Override
     public void setUser(User user) {
-        this.user = (UserMongo) user;
+        this.user = user.getId();
     }
 
     @Override
     public void setRoom(Room room) {
-        this.roomId = room.getId();
+        this.room = room.getId();
     }
 }
