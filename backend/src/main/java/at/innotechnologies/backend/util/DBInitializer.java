@@ -3,6 +3,9 @@ package at.innotechnologies.backend.util;
 import at.innotechnologies.backend.book.Book;
 import at.innotechnologies.backend.book.BookMySql;
 import at.innotechnologies.backend.book.BookRepository;
+import at.innotechnologies.backend.borrow.Borrows;
+import at.innotechnologies.backend.borrow.BorrowsMySql;
+import at.innotechnologies.backend.borrow.BorrowsRepository;
 import at.innotechnologies.backend.library.*;
 import at.innotechnologies.backend.user.*;
 import com.github.javafaker.Faker;
@@ -23,6 +26,7 @@ public class DBInitializer {
     @NonNull private BookRepository bookRepository;
     @NonNull private RoomRepository roomRepository;
     @NonNull private LibraryRepository libraryRepository;
+    @NonNull private BorrowsRepository borrowsRepository;
     @NonNull private LibraryHelper libraryHelper;
 
     private boolean alreadyInitialized;
@@ -153,6 +157,20 @@ public class DBInitializer {
 
                     libraryHelper.addBookToRoom(randomLibrary.getRooms().get(faker.number().numberBetween(0, numRooms)), book, faker.number().numberBetween(5, 50));
                 }
+            }
+
+            for (int i = 0; i < 200; i++) {
+                Borrows borrows = new BorrowsMySql();
+
+                borrows.setStartDate(LocalDate.now());
+                borrows.setEndDate(LocalDate.now().plusMonths(2));
+                borrows.setUser(users.get(faker.random().nextInt(0, users.size())));
+
+                final Library library = libraries.get(faker.number().numberBetween(0, numLibraries));
+                borrows.setRoom(library.getRooms().get(faker.random().nextInt(0, library.getRooms().size())));
+                borrows.setBook(books.get(faker.random().nextInt(0, books.size())));
+
+                borrowsRepository.save(borrows);
             }
 
             alreadyInitialized = true;
